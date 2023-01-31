@@ -55,34 +55,6 @@ const readFolder = (folder: string) => {
                   console.log(lines)
               }
           }
-          const [
-              seed,
-              prompt,
-              styles,
-              model,
-              sampler,
-              steps,
-              cfg,
-              width,
-              height,
-              created
-          ] = file.replace(/(\.png)+$/, '').split('---')
-          if(seed && prompt && styles && model && sampler && steps && cfg && width && height && created) {
-              const metaData = {
-                  file,
-                  seed,
-                  prompt: prompt.replace(/_/g, ' '),
-                  styles,
-                  model,
-                  sampler,
-                  steps,
-                  cfg,
-                  width,
-                  height,
-                  created: parseInt(created)
-              }
-              return acc.concat([metaData])
-          }
       }
       return acc
   }, [])
