@@ -49,7 +49,6 @@ The following features are planned in the approximate order they are listed:
 
 * Multi-dimensional grid to easily compare seed, prompt, sampler, steps, etc. 
 * Online demo
-* Add wildcards to prompt filter
 * Read PNG metadata from image files themselves instead of from the image filenames
 * Delete unwanted images from within app interface
 * Add notes and custom tags to images that can be use for searching and filtering

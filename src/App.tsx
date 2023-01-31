@@ -43,12 +43,23 @@ const App = () => {
     .filter(([key]) => key.match(/^filter-/))
     .map(([key, value]) => [key.replace(/^filter-/, ''), value]) as Array<[keyof ImageMetadata, string]>
 
-  const filterImage = (image: ImageMetadata) => 
-    (image.prompt + image.seed).match(search) && 
+  const filterImage = (image: ImageMetadata) => {
+    const searchTargets = image.prompt.toLowerCase().split(' ')
+    const searchSanitized = search.replace(/^\s*/, '').replace(/\s*$/, '').toLowerCase()
+    const searchTests = searchSanitized
+      .split(' ')
+      .filter(word => word.length > 2)
+      .map(word => findBestMatch(word, searchTargets).bestMatch.rating)
+    return (
+      searchTests.length == 0 ||
+      image.seed.match(searchSanitized) ||
+      Math.min(...searchTests) > .4
+    ) &&
     filters.reduce(
       (passing, [key, value]) => passing && image[key] === value,
       true
     )
+  }
 
   const representsGroup = (image: ImageMetadata) => {
     const candidates = imageGroups[getGroupKey(image)].filter(filterImage).sort(sortBy(sort))
