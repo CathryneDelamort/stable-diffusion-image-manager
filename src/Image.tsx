@@ -49,7 +49,7 @@ const Image = ({
     </a>
     <Stack justifyContent="center" gap="sm">
       <Box title={`Model`}>
-        <Filterable type="model">{model}</Filterable>
+        Model hash: <Filterable type="model">{model}</Filterable>
       </Box>
       <Box>
         <Filterable type="seed">{seed}</Filterable>

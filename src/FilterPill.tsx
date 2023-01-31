@@ -27,6 +27,7 @@ const FilterPill = ({ type, value }: Props) => {
     }}>
         {type == 'cfg' && 'CFG'}
         {type == 'prompt' && '💬'}
+        {type == 'model' && '📦'}
         {type == 'seed' && '🌱'}
         {type == 'sampler' && '👀'}
         {type == 'steps' && '🚶'}
