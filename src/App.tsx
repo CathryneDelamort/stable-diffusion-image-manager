@@ -1,12 +1,11 @@
 import { sortBy } from 'sort-by-typescript'
 import { findBestMatch } from 'string-similarity'
-import { useSearchParams } from "react-router-dom"
-import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import images from './metadata.json'
 import Image from './Image'
 import FilterPill from './FilterPill'
-import useDebounce from './use-debounce'
 import SortSelector from './SortSelector'
+import Search, { useSearch } from './Search'
 
 type ImageMetadata = typeof images[0]
 type ImageGroups = { [key: string]: ImageMetadata[] }
@@ -35,19 +34,17 @@ const imageGroups = images.reduce(
   {} as ImageGroups
 )
 
-function App() {
+const App = () => {
   const [searchParams, setSearchParams] = useSearchParams()
+  const search = useSearch()
   const sort = searchParams.get('sort') || '-created'
   const groupImages = searchParams.get('groupImages') == 'true' || false
   const filters = Array.from(searchParams)
     .filter(([key]) => key.match(/^filter-/))
     .map(([key, value]) => [key.replace(/^filter-/, ''), value]) as Array<[keyof ImageMetadata, string]>
-  const [search, setSearch] = useState('')
-  const debouncedSearch = useDebounce(search, 500);
-  const [filteredImages, setFilteredImages] = useState(images)
 
   const filterImage = (image: ImageMetadata) => 
-    (image.prompt + image.seed).match(debouncedSearch) && 
+    (image.prompt + image.seed).match(search) && 
     filters.reduce(
       (passing, [key, value]) => passing && image[key] === value,
       true
@@ -58,23 +55,15 @@ function App() {
     return candidates.length === 1 || image == candidates[0]
   }
 
-  useEffect(() => {
-    setFilteredImages(
-      images
-        .filter((image: ImageMetadata) =>
-          filterImage(image) &&
-          (filters.length > 0 || !groupImages || representsGroup(image))
-        )
-    )
-  }, [debouncedSearch, searchParams])
+  const filteredImages = images.filter((image: ImageMetadata) =>
+    filterImage(image) &&
+    (filters.length > 0 || !groupImages || representsGroup(image))
+  )
 
   return (
     <div style={{ display: 'flex', gap: '2rem', flexDirection: 'column', padding: '2rem' }}>
       <div style={{ display: 'flex', placeContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-        <div style={{ display: 'flex', gap: '.5rem' }}>
-          Search
-          <input type="text" value={search} onChange={e => setSearch(e.target.value)} />
-        </div>
+        <Search />
         <div style={{ display: 'flex', gap: '.5rem' }}>
           Sort by <SortSelector />
         </div>

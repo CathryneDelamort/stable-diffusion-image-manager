@@ -5,12 +5,15 @@ import {
 } from "react-router-dom"
 import App from './App'
 import './index.css'
+import { SearchProvider } from './Search'
 
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <Router>
-      <App />
+      <SearchProvider>
+        <App />
+      </SearchProvider>
     </Router>
   </React.StrictMode>,
 )
