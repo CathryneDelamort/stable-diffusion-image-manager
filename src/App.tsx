@@ -25,7 +25,7 @@ function App() {
   const [samplerFilter, setSamplerFilter] = useState('')
   const debouncedPromptFilter = useDebounce(promptFilter, 500);
   const [filteredImages, setFilteredImages] = useState(images)
-  const [sortKey, setSortBy] = useState('created')
+  const [sortKey, setSortBy] = useState('-created')
 
   useEffect(() => {
     setFilteredImages(
@@ -47,16 +47,16 @@ function App() {
         <div style={{ display: 'flex', gap: '.5rem' }}>
           Sort by
           <select onChange={e => setSortBy(e.target.value as MetaDataKey)}>
-            <option value="created">Created ⬆</option>
-            <option value="-created">Created ⬇</option>
-            <option value="prompt">Prompt ⬆</option>
-            <option value="-prompt">Prompt ⬇</option>
-            <option value="prompt,seed">Prompt ⬆, Seed ⬆</option>
-            <option value="-prompt">Prompt ⬇</option>
-            <option value="seed">Seed ⬆</option>
-            <option value="-seed">Seed ⬇</option>
-            <option value="steps">Steps ⬆</option>
-            <option value="-steps">Steps ⬇</option>
+            <option value="created" selected={sortKey === 'created'}>Created ⬆</option>
+            <option value="-created" selected={sortKey === '-created'}>Created ⬇</option>
+            <option value="prompt" selected={sortKey === 'prompt'}>Prompt ⬆</option>
+            <option value="-prompt" selected={sortKey === '-prompt'}>Prompt ⬇</option>
+            <option value="prompt,seed" selected={sortKey === 'prompt,seed'}>Prompt ⬆, Seed ⬆</option>
+            <option value="-prompt" selected={sortKey === '-prompt'}>Prompt ⬇</option>
+            <option value="seed" selected={sortKey === 'seed'}>Seed ⬆</option>
+            <option value="-seed" selected={sortKey === '-seed'}>Seed ⬇</option>
+            <option value="steps" selected={sortKey === 'steps'}>Steps ⬆</option>
+            <option value="-steps" selected={sortKey === '-steps'}>Steps ⬇</option>
           </select>
         </div>
       </div>
