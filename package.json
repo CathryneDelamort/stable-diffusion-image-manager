@@ -14,10 +14,11 @@
   "dependencies": {
     "@vanilla-extract/css": "^1.9.2",
     "@vanilla-extract/sprinkles": "^1.5.1",
-    "express": "^4.18ccc.2",
+    "express": "^4.18.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.7.0",
+    "react-swipeable": "^7.0.0",
     "sort-by-typescript": "^1.2.3",
     "string-similarity": "^4.0.4",
     "vite-plugin-mix": "^0.4.0"

@@ -11,6 +11,7 @@ import { Stack } from './Stack'
 import { useEffect, useState } from 'react'
 import FolderSelector from './FolderSelector'
 import BackToTop from './BakcToTop'
+import SwipeMode from './SwipeMode'
 
 function removeItem<T>(arr: Array<T>, value: T): Array<T> {
   const index = arr.indexOf(value);
@@ -21,6 +22,7 @@ function removeItem<T>(arr: Array<T>, value: T): Array<T> {
 }
 
 const App = () => {
+  const [swipeMode, setSwipeMode] = useState(false)
   const [checkedImages, setCheckedImages] = useState<string[]>([])
   const [searchParams] = useSearchParams()
   const [images, setImages] = useState<ImageData[]>([])
@@ -49,7 +51,7 @@ const App = () => {
       (passing, [key, value]) => passing && image[key] === value,
       true
     )
-  })
+  }).sort(sortBy(sort))
 
   const handleImageChecked = (file: string, checked: boolean) => {
     if(checked) setCheckedImages(checkedImages.concat([file]))
@@ -81,6 +83,14 @@ const App = () => {
 
   return (
     <Stack gap="xl" paddingY="xl">
+      {swipeMode &&
+        <SwipeMode
+          folder={folder}
+          images={filteredImages}
+          onClose={() => { loadImages(); setSwipeMode(false) }}
+          onAction={handleCheckedImagesAction}
+        />
+      }
       <FlexBox placeItems="center" gap="md" wrap>
         <FlexBox gap="sm">
           Folder <FolderSelector />
@@ -89,11 +99,13 @@ const App = () => {
         <FlexBox gap="sm">
           Sort by <SortSelector />
         </FlexBox>
+        <button onClick={() => setSwipeMode(true)}>Swipe Mode</button>
         {checkedImages.length > 0 &&
           <Box position="fixed" style={{ top: 0, right: 0, backgroundColor: '#444', zIndex: 9999, borderBottomLeftRadius: '1rem', border: '1px solid', borderTop: 'none', borderRight: 'none' }} paddingY="lg" paddingX="xl">
             <select onChange={e => handleCheckedImagesAction(e.target.value)}>
               <option>{checkedImages.length} checked images{' '}</option>
               <option value="uncheck">Uncheck {checkedImages.length} images</option>
+              <option value="generated">Return {checkedImages.length} images to generated</option>
               <option value="review">Review {checkedImages.length} images</option>
               <option value="queue">Queue {checkedImages.length} images</option>
               <option value="archive">Archive {checkedImages.length} images</option>
@@ -108,11 +120,11 @@ const App = () => {
         )}
       </FlexBox>
       <FlexBox gap="xl" wrap justifyContent="center">
-        {filteredImages.sort(sortBy(sort)).slice(0, 100).map(image =>
+        {!swipeMode && filteredImages.slice(0, 100).map(image =>
           <Image {...image} key={image.file} onCheckChanged={handleImageChecked} checked={checkedImages.indexOf(image.file) > -1} />
         )}
       </FlexBox>
-      <BackToTop />
+      {!swipeMode && <BackToTop />}
     </Stack>
   )
 }
