@@ -49,13 +49,15 @@ const App = () => {
   const filterImage = (image: ImageMetadata) => {
     const searchTargets = image.prompt.toLowerCase().split(' ')
     const searchSanitized = search.replace(/^\s*/, '').replace(/\s*$/, '').toLowerCase()
-    const searchTests = searchSanitized
-      .split(' ')
-      .filter(word => word.length > 2)
-      .map(word => findBestMatch(word, searchTargets).bestMatch.rating)
+    const promptWords = searchSanitized.split(' ')
+    const searchTests = promptWords.filter(word => word.length > 2)
+      .map(word => word.match(/^-/) // word should not be present?
+        ? .6 - findBestMatch(word, searchTargets).bestMatch.rating
+        : findBestMatch(word, searchTargets).bestMatch.rating
+      )
     return (
-      searchTests.length == 0 ||
-      image.seed.match(searchSanitized) ||
+      searchTests.length == 0 || // there is nothing to search
+      (searchSanitized.match(/^\d/) && image.seed.match(searchSanitized)) || //match seed
       Math.min(...searchTests) > .4
     ) &&
     filters.reduce(
