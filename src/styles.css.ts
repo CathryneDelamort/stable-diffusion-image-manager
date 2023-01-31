@@ -42,7 +42,8 @@ const responsiveProperties = defineProperties({
     paddingTop: vars.space,
     paddingBottom: vars.space,
     paddingLeft: vars.space,
-    paddingRight: vars.space
+    paddingRight: vars.space,
+    position: ['absolute', 'relative', 'fixed']
   },
   shorthands: {
     direction: ['flexDirection'],
