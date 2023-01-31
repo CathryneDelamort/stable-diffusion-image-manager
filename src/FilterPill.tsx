@@ -1,18 +1,37 @@
-import { PropsWithChildren } from 'react'
+import { useSearchParams } from 'react-router-dom'
 
-type Props = PropsWithChildren<{
-    onRemove: () => void
-}>
+type Props = {
+    type: string
+    value: string
+}
 
-const FilterPill = ({ children, onRemove }: Props) => 
-    <div onClick={onRemove} style={{ 
+const FilterPill = ({ type, value }: Props) => {
+    const [searchParams, setSearchParams] = useSearchParams()
+    
+    const handleClick = () => {
+        const paramKey = `filter-${type}`
+        const remaining = searchParams.getAll(paramKey).filter(v => v != value)
+        console.log(remaining)
+        searchParams.delete(paramKey)
+        remaining.forEach(v => searchParams.append(paramKey, v))
+        setSearchParams(searchParams)
+    }
+
+    return <div onClick={handleClick} title={`Remove ${type} filter`} style={{ 
         border: '1px solid',
         borderRadius: '.5rem',
         padding: '.25rem .5rem',
         cursor: 'pointer',
         backgroundColor: '#444'
     }}>
-        {children}
+        {type == 'cfg' && 'CFG'}
+        {type == 'prompt' && '💬'}
+        {type == 'seed' && '🌱'}
+        {type == 'sampler' && '👀'}
+        {type == 'steps' && '🚶'}
+        {' '}
+        {value}
     </div>
+}
 
 export default FilterPill

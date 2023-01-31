@@ -1,12 +1,7 @@
 import metadata from './metadata.json'
 import Filterable from './Filterable'
 
-type Props = typeof metadata[0] & {
-    onSeedSelect: (seed: string) => void,
-    onSamplerSelect: (seed: string) => void,
-    selectedSeed?: string,
-    selectedSampler?: string
-}
+type Props = typeof metadata[0] 
 
 const Image = ({ 
     cfg,
@@ -16,10 +11,6 @@ const Image = ({
     steps, 
     seed, 
     sampler,
-    onSeedSelect,
-    onSamplerSelect,
-    selectedSeed,
-    selectedSampler
 }: Props) => <div style={{ width: '200px'}}>
     <a href={`/images/${file}`} target="_blank" style={{ display: 'block'}}>
         <img src={`/images/${file}`} style={{ width: '200px' }} />
@@ -27,19 +18,20 @@ const Image = ({
     <div style={{ display: 'flex', justifyContent: 'center', gap: '.5rem', flexDirection: 'column' }}>
         <div title={`Model`}>{model}</div>
         <div>
-            {seed === selectedSeed 
-                ? seed
-                : <Filterable onFilter={() => onSeedSelect(seed)}>{seed}</Filterable>
-            }
+            <Filterable type="seed">{seed}</Filterable>
         </div>
         <div>
-            {sampler === selectedSampler
-                ? sampler
-                : <Filterable onFilter={() => onSamplerSelect(sampler)}>{sampler}</Filterable>
-            }
-            {' '} | {steps} steps | <span title="Classified Free Guidance Scale">{cfg} cfg</span>
+            <Filterable type="sampler">{sampler}</Filterable> |{' '}
+            <Filterable type="steps" value={steps}>{steps} steps</Filterable> |{' '}
+            <span title="Classified Free Guidance Scale">
+                <Filterable type="cfg" value={cfg}>
+                    {cfg} cfg
+                </Filterable>
+            </span>
         </div>
-        <div>{prompt}</div>
+        <div>
+            <Filterable type="prompt">{prompt}</Filterable>
+        </div>
     </div>
 </div>
 

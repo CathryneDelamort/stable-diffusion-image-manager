@@ -26,23 +26,22 @@ function App() {
   const [searchParams, setSearchParams] = useSearchParams()
   const sort = searchParams.get('sort') || '-created'
   const groupImages = searchParams.get('groupImages') == 'true' || false
+  const filters = Array.from(searchParams)
+    .filter(([key]) => key.match(/^filter-/))
+    .map(([key, value]) => [key.replace(/^filter-/, ''), value]) as Array<[keyof ImageMetadata, string]>
   const [search, setSearch] = useState('')
-  const [seedFilter, setSeedFilter] = useState('')
-  const [samplerFilter, setSamplerFilter] = useState('')
-  const debouncedPromptFilter = useDebounce(search, 500);
+  const debouncedSearch = useDebounce(search, 500);
   const [filteredImages, setFilteredImages] = useState(images)
-  const pillFilterApplied = Boolean(seedFilter || samplerFilter)
 
-  const filterImage = ({ seed, prompt, sampler }: ImageMetadata) => 
-    (prompt + seed).match(debouncedPromptFilter) &&
-    (!samplerFilter || sampler === samplerFilter) &&
-    (!seedFilter || seed === seedFilter)
-
-  const getFilteredImageGroup = (image: ImageMetadata) => 
-    getImageGroup(image).filter(filterImage)
+  const filterImage = (image: ImageMetadata) => 
+    (image.prompt + image.seed).match(debouncedSearch) && 
+    filters.reduce(
+      (passing, [key, value]) => passing && image[key] === value,
+      true
+    )
 
   const representsGroup = (image: ImageMetadata) => {
-    const candidates = getFilteredImageGroup(image).sort(sortBy(sort))
+    const candidates = getImageGroup(image).filter(filterImage).sort(sortBy(sort))
     return candidates.length === 1 || image == candidates[0]
   }
 
@@ -51,16 +50,16 @@ function App() {
       images
         .filter((image: ImageMetadata) =>
           filterImage(image) &&
-          (pillFilterApplied || !groupImages || representsGroup(image))
+          (filters.length > 0 || !groupImages || representsGroup(image))
         )
     )
-  }, [debouncedPromptFilter, pillFilterApplied, groupImages, sort, seedFilter, imageGroups])
+  }, [debouncedSearch, searchParams, sort, imageGroups])
 
   return (
     <div style={{ display: 'flex', gap: '2rem', flexDirection: 'column', padding: '2rem' }}>
       <div style={{ display: 'flex', placeContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
         <div style={{ display: 'flex', gap: '.5rem' }}>
-          Filter
+          Search
           <input type="text" value={search} onChange={e => setSearch(e.target.value)} />
         </div>
         <div style={{ display: 'flex', gap: '.5rem' }}>
@@ -68,7 +67,7 @@ function App() {
         </div>
       </div>
       <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-        {!pillFilterApplied && 
+        {filters.length === 0 && 
             <div style={{ display: 'flex', gap: '.5rem' }} title="Groups images by same seed and prompt">
               Group similar images
               <input 
@@ -82,25 +81,13 @@ function App() {
               />
             </div>
           }
-        {seedFilter &&
-          <FilterPill onRemove={() => setSeedFilter('')}>
-            🌱 {seedFilter}
-          </FilterPill>
-        }
-        {samplerFilter &&
-          <FilterPill onRemove={() => setSamplerFilter('')}>
-            🔎 {samplerFilter}
-          </FilterPill>
-        }
+        {filters.map(([key, value]) =>
+          <FilterPill key={`${key}+${value}`} type={key.replace(/^filter-/, '')} value={value} />
+        )}
       </div>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '2rem'}}>
         {filteredImages.sort(sortBy(sort)).map(image => 
-          <Image {...image} key={image.file} 
-            onSeedSelect={seed => setSeedFilter(seed)} 
-            onSamplerSelect={sampler => setSamplerFilter(sampler)} 
-            selectedSampler={samplerFilter}
-            selectedSeed={seedFilter}
-          /> 
+          <Image {...image} key={image.file} /> 
         )}
       </div>
     </div>
