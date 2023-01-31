@@ -55,6 +55,8 @@ function App() {
             <option value="-prompt" selected={sortKey === '-prompt'}>Prompt ⬇</option>
             <option value="seed" selected={sortKey === 'seed'}>Seed ⬆</option>
             <option value="-seed" selected={sortKey === '-seed'}>Seed ⬇</option>
+            <option value="steps,sampler" selected={sortKey === 'steps'}>Steps ⬆, Sampler ⬆</option>
+            <option value="-steps,sampler" selected={sortKey === '-steps'}>Steps ⬇, Sampler ⬆</option>
             <option value="steps" selected={sortKey === 'steps'}>Steps ⬆</option>
             <option value="-steps" selected={sortKey === '-steps'}>Steps ⬇</option>
           </select>
