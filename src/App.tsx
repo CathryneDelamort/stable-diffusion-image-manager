@@ -1,6 +1,5 @@
 import { sortBy } from 'sort-by-typescript'
 import { useSearchParams } from "react-router-dom"
-import './App.css'
 import { useEffect, useState } from 'react'
 import images from '../public/metadata.json'
 import Image from './Image'
@@ -58,8 +57,8 @@ function App() {
   }, [debouncedPromptFilter, pillFilterApplied, groupImages, sort, seedFilter, imageGroups])
 
   return (
-    <div className="App" style={{ display: 'flex', gap: '2rem', flexDirection: 'column' }}>
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
+    <div style={{ display: 'flex', gap: '2rem', flexDirection: 'column', padding: '2rem' }}>
+      <div style={{ display: 'flex', placeContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
         <div style={{ display: 'flex', gap: '.5rem' }}>
           Filter
           <input type="text" value={search} onChange={e => setSearch(e.target.value)} />
@@ -94,7 +93,7 @@ function App() {
           </FilterPill>
         }
       </div>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '2rem', width: '100%', }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '2rem'}}>
         {filteredImages.sort(sortBy(sort)).map(image => 
           <Image {...image} key={image.file} 
             onSeedSelect={seed => setSeedFilter(seed)} 
