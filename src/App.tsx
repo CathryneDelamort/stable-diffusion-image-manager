@@ -1,3 +1,4 @@
+import { sortBy } from 'sort-by-typescript'
 import './App.css'
 import { useEffect, useState } from 'react'
 import images from '../public/metadata.json'
@@ -24,8 +25,7 @@ function App() {
   const [samplerFilter, setSamplerFilter] = useState('')
   const debouncedPromptFilter = useDebounce(promptFilter, 500);
   const [filteredImages, setFilteredImages] = useState(images)
-  const [sortBy, setSortBy] = useState<MetaDataKey>('seed')
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc')
+  const [sortKey, setSortBy] = useState('created')
 
   useEffect(() => {
     setFilteredImages(
@@ -35,12 +35,9 @@ function App() {
             (!samplerFilter || sampler === samplerFilter) &&
             (!seedFilter || seed === seedFilter)
         )
-        .sort((a, b) => sortOrder === 'asc'
-          ? a[sortBy].localeCompare(b[sortBy])
-          : b[sortBy].localeCompare(a[sortBy])
-        )
+        .sort(sortBy(`${sortKey}`))
     )
-  }, [debouncedPromptFilter, sortBy, sortOrder, seedFilter])
+  }, [debouncedPromptFilter, sortKey, seedFilter])
 
   return (
     <div className="App" style={{ display: 'flex', gap: '2rem', flexDirection: 'column' }}>
@@ -50,13 +47,16 @@ function App() {
         <div style={{ display: 'flex', gap: '.5rem' }}>
           Sort by
           <select onChange={e => setSortBy(e.target.value as MetaDataKey)}>
-            <option value="prompt">Prompt</option>
-            <option value="seed">Seed</option>
-            <option value="steps">Steps</option>
-          </select>
-          <select onChange={e => setSortOrder(e.target.value as 'asc' | 'desc')}>
-            <option value="asc">ascending</option>
-            <option value="desc">descending</option>
+            <option value="created">Created ⬆</option>
+            <option value="-created">Created ⬇</option>
+            <option value="prompt">Prompt ⬆</option>
+            <option value="-prompt">Prompt ⬇</option>
+            <option value="prompt,seed">Prompt ⬆, Seed ⬆</option>
+            <option value="-prompt">Prompt ⬇</option>
+            <option value="seed">Seed ⬆</option>
+            <option value="-seed">Seed ⬇</option>
+            <option value="steps">Steps ⬆</option>
+            <option value="-steps">Steps ⬇</option>
           </select>
         </div>
       </div>
@@ -68,7 +68,7 @@ function App() {
         }
         {samplerFilter &&
           <FilterPill onRemove={() => setSamplerFilter('')}>
-            {samplerFilter}
+            🔎 {samplerFilter}
           </FilterPill>
         }
       </div>

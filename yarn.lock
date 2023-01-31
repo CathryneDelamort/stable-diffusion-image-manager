@@ -1713,6 +1713,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"sort-by-typescript@npm:^1.2.3":
+  version: 1.2.3
+  resolution: "sort-by-typescript@npm:1.2.3"
+  checksum: 87f040c2c4f06e5da660b939fd4cd733ff62cacfecfc1a6158d3d8291d00b0bee140750c4f8e663ea415c9cb1abd6804c210f636332e661ccc47a02fdf31f212
+  languageName: node
+  linkType: hard
+
 "source-map-js@npm:^1.0.2":
   version: 1.0.2
   resolution: "source-map-js@npm:1.0.2"
@@ -1738,6 +1745,7 @@ __metadata:
     "@vitejs/plugin-react": ^3.0.0
     react: ^18.2.0
     react-dom: ^18.2.0
+    sort-by-typescript: ^1.2.3
     typescript: ^4.9.3
     vite: ^4.0.0
   languageName: unknown

@@ -17,10 +17,23 @@ const fileMetadata = readdirSync(IMAGE_PATH).reduce((acc, file) => {
             steps,
             cfg,
             width,
-            height
+            height,
+            created
         ] = file.replace(/(\.png)+$/, '').split('---')
-        if(seed && prompt && styles && model && sampler && steps && cfg && width && height) {
-            const metaData = { file, seed, prompt: prompt.replace(/_/g, ' '), styles, model, sampler, steps, cfg, width, height }
+        if(seed && prompt && styles && model && sampler && steps && cfg && width && height && created) {
+            const metaData = { 
+                file, 
+                seed, 
+                prompt: prompt.replace(/_/g, ' '), 
+                styles, 
+                model, 
+                sampler, 
+                steps, 
+                cfg, 
+                width, 
+                height, 
+                created
+            }
             return acc.concat([metaData])
         }
     }
