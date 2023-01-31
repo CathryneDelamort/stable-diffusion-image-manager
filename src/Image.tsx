@@ -24,9 +24,7 @@ const Image = ({
         <img src={`/images/${file}`} style={{ width: '200px' }} />
     </a>
     <div style={{ display: 'flex', justifyContent: 'center', gap: '.5rem', flexDirection: 'column' }}>
-        <div>
-            {model}
-        </div>
+        <div title={`Model`}>{model}</div>
         <div>
             {seed === selectedSeed 
                 ? seed
