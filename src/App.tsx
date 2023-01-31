@@ -10,6 +10,7 @@ import { FlexBox } from './FlexBox'
 import { Stack } from './Stack'
 import { useEffect, useState } from 'react'
 import FolderSelector from './FolderSelector'
+import BackToTop from './BakcToTop'
 
 function removeItem<T>(arr: Array<T>, value: T): Array<T> {
   const index = arr.indexOf(value);
@@ -111,24 +112,7 @@ const App = () => {
           <Image {...image} key={image.file} onCheckChanged={handleImageChecked} checked={checkedImages.indexOf(image.file) > -1} />
         )}
       </FlexBox>
-      <Box
-        position="fixed"
-        style={{
-          bottom: 0,
-          right: '1.5rem',
-          cursor: 'pointer',
-          backgroundColor: '#444',
-          border: '1px solid',
-          borderBottom: 'none',
-          borderTopRightRadius: '1rem',
-          borderTopLeftRadius: '1rem',
-        }}
-        paddingX="md"
-        paddingY="sm"
-        onClick={() => window.scrollTo(0, 0)}
-      >
-        Back to top ⬆
-      </Box>
+      <BackToTop />
     </Stack>
   )
 }
