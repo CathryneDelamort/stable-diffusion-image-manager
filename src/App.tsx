@@ -1,4 +1,5 @@
 import { sortBy } from 'sort-by-typescript'
+import { findBestMatch } from 'string-similarity'
 import { useSearchParams } from "react-router-dom"
 import { useEffect, useState } from 'react'
 import images from './metadata.json'
@@ -10,7 +11,20 @@ import SortSelector from './SortSelector'
 type ImageMetadata = typeof images[0]
 type ImageGroups = { [key: string]: ImageMetadata[] }
 
-const getGroupKey = ({ seed, prompt}: ImageMetadata) => seed + prompt.replace(/\[|\]|\(|\)/g, '')
+const seedGroupPrompts: { [key: string]: string[]} = {}
+const getGroupKey = ({ seed, prompt}: ImageMetadata) => {
+  const sanitizedPrompt = prompt.replace(/\s|-|\[|\]|\(|\)/g, '')
+  seedGroupPrompts[seed] = seedGroupPrompts[seed] || []
+  if(seedGroupPrompts[seed].length === 0) {
+    seedGroupPrompts[seed].push(sanitizedPrompt)
+    return seed + sanitizedPrompt
+  }
+  
+  const { bestMatch: { rating, target }} = findBestMatch(sanitizedPrompt, seedGroupPrompts[seed])
+  if(rating > .7) return seed + target
+  seedGroupPrompts[seed].push(sanitizedPrompt)
+  return seed + sanitizedPrompt
+}
 const imageGroups = images.reduce(
   (acc, image) => {
     const groupKey = getGroupKey(image)
@@ -20,7 +34,6 @@ const imageGroups = images.reduce(
   }, 
   {} as ImageGroups
 )
-const getImageGroup = (image: ImageMetadata) => imageGroups[getGroupKey(image)]
 
 function App() {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -41,7 +54,7 @@ function App() {
     )
 
   const representsGroup = (image: ImageMetadata) => {
-    const candidates = getImageGroup(image).filter(filterImage).sort(sortBy(sort))
+    const candidates = imageGroups[getGroupKey(image)].filter(filterImage).sort(sortBy(sort))
     return candidates.length === 1 || image == candidates[0]
   }
 
@@ -53,7 +66,7 @@ function App() {
           (filters.length > 0 || !groupImages || representsGroup(image))
         )
     )
-  }, [debouncedSearch, searchParams, sort, imageGroups])
+  }, [debouncedSearch, searchParams])
 
   return (
     <div style={{ display: 'flex', gap: '2rem', flexDirection: 'column', padding: '2rem' }}>
@@ -69,7 +82,7 @@ function App() {
       <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
         {filters.length === 0 && 
             <div style={{ display: 'flex', gap: '.5rem' }} title="Groups images by same seed and prompt">
-              Group similar images
+              Group variations
               <input 
                 type="checkbox" 
                 checked={groupImages} 
