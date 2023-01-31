@@ -9,6 +9,7 @@ type Props = typeof metadata[0] & {
 }
 
 const Image = ({ 
+    cfg,
     file, 
     model,
     prompt, 
@@ -36,7 +37,7 @@ const Image = ({
                 ? sampler
                 : <Filterable onFilter={() => onSamplerSelect(sampler)}>{sampler}</Filterable>
             }
-            {' '} at {steps} steps
+            {' '} | {steps} steps | <span title="Classified Free Guidance Scale">{cfg} cfg</span>
         </div>
         <div>{prompt}</div>
     </div>
