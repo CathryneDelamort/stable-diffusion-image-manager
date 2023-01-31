@@ -1,14 +1,14 @@
 import { sortBy } from 'sort-by-typescript'
+import { useSearchParams } from "react-router-dom"
 import './App.css'
 import { useEffect, useState } from 'react'
 import images from '../public/metadata.json'
 import Image from './Image'
 import FilterPill from './FilterPill'
 import useDebounce from './use-debounce'
+import SortSelector from './SortSelector'
 
 type ImageMetadata = typeof images[0]
-type MetaDataKey = keyof ImageMetadata
-type MetaDataLists = Record<MetaDataKey, string[]>
 type ImageGroups = { [key: string]: ImageMetadata[] }
 
 const getGroupKey = ({ seed, prompt}: ImageMetadata) => seed + prompt.replace(/\[|\]|\(|\)/g, '')
@@ -24,13 +24,14 @@ const imageGroups = images.reduce(
 const getImageGroup = (image: ImageMetadata) => imageGroups[getGroupKey(image)]
 
 function App() {
+  const [searchParams] = useSearchParams()
+  const sort = searchParams.get('sort') || '-created'
   const [search, setSearch] = useState('')
   const [seedFilter, setSeedFilter] = useState('')
   const [groupImages, setGroupImages] = useState(false)
   const [samplerFilter, setSamplerFilter] = useState('')
   const debouncedPromptFilter = useDebounce(search, 500);
   const [filteredImages, setFilteredImages] = useState(images)
-  const [sortKey, setSortBy] = useState('-created')
   const pillFilterApplied = Boolean(seedFilter || samplerFilter)
 
   const filterImage = ({ seed, prompt, sampler }: ImageMetadata) => 
@@ -42,7 +43,7 @@ function App() {
     getImageGroup(image).filter(filterImage)
 
   const representsGroup = (image: ImageMetadata) => {
-    const candidates = getFilteredImageGroup(image).sort(sortBy(sortKey))
+    const candidates = getFilteredImageGroup(image).sort(sortBy(sort))
     return candidates.length === 1 || image == candidates[0]
   }
 
@@ -53,9 +54,8 @@ function App() {
           filterImage(image) &&
           (pillFilterApplied || !groupImages || representsGroup(image))
         )
-        .sort(sortBy(sortKey))
     )
-  }, [debouncedPromptFilter, pillFilterApplied, groupImages, sortKey, seedFilter, imageGroups])
+  }, [debouncedPromptFilter, pillFilterApplied, groupImages, sort, seedFilter, imageGroups])
 
   return (
     <div className="App" style={{ display: 'flex', gap: '2rem', flexDirection: 'column' }}>
@@ -65,22 +65,7 @@ function App() {
           <input type="text" value={search} onChange={e => setSearch(e.target.value)} />
         </div>
         <div style={{ display: 'flex', gap: '.5rem' }}>
-          Sort by
-          <select onChange={e => setSortBy(e.target.value as MetaDataKey)} value={sortKey}>
-            <option value="created">Created ⬆</option>
-            <option value="-created">Created ⬇</option>
-            <option value="prompt">Prompt ⬆</option>
-            <option value="-prompt">Prompt ⬇</option>
-            <option value="prompt,seed">Prompt ⬆, Seed ⬆</option>
-            <option value="-prompt">Prompt ⬇</option>
-            <option value="seed,prompt">Seed ⬆, Prompt, ⬆</option>
-            <option value="seed,-prompt">Seed ⬆, Prompt, ⬇</option>
-            <option value="-seed">Seed ⬇</option>
-            <option value="steps,sampler">Steps ⬆, Sampler ⬆</option>
-            <option value="-steps,sampler">Steps ⬇, Sampler ⬆</option>
-            <option value="steps">Steps ⬆</option>
-            <option value="-steps">Steps ⬇</option>
-          </select>
+          Sort by <SortSelector />
         </div>
       </div>
       <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
@@ -102,7 +87,7 @@ function App() {
         }
       </div>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '2rem', width: '100%', }}>
-        {filteredImages.map(image => 
+        {filteredImages.sort(sortBy(sort)).map(image => 
           <Image {...image} key={image.file} 
             onSeedSelect={seed => setSeedFilter(seed)} 
             onSamplerSelect={sampler => setSamplerFilter(sampler)} 
