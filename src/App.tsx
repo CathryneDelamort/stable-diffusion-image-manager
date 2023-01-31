@@ -1,7 +1,7 @@
 import { sortBy } from 'sort-by-typescript'
 import { useSearchParams } from "react-router-dom"
 import { useEffect, useState } from 'react'
-import images from '../public/metadata.json'
+import images from './metadata.json'
 import Image from './Image'
 import FilterPill from './FilterPill'
 import useDebounce from './use-debounce'

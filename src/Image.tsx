@@ -1,4 +1,4 @@
-import metadata from '../public/metadata.json'
+import metadata from './metadata.json'
 import Filterable from './Filterable'
 
 type Props = typeof metadata[0] & {

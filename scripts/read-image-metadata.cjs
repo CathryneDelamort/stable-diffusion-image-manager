@@ -40,4 +40,4 @@ const fileMetadata = readdirSync(IMAGE_PATH).reduce((acc, file) => {
     return acc
 }, [])
 
-writeFileSync(resolve(__dirname, '../public/metadata.json'), JSON.stringify(fileMetadata, null, 2))
+writeFileSync(resolve(__dirname, '../src/metadata.json'), JSON.stringify(fileMetadata, null, 2))
