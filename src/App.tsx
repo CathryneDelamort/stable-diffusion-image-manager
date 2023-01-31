@@ -6,6 +6,9 @@ import Image from './Image'
 import FilterPill from './FilterPill'
 import SortSelector from './SortSelector'
 import Search, { useSearch } from './Search'
+import { Box } from './Box'
+import { FlexBox } from './FlexBox'
+import { Stack } from './Stack'
 
 type ImageMetadata = typeof images[0]
 type ImageGroups = { [key: string]: ImageMetadata[] }
@@ -72,14 +75,14 @@ const App = () => {
   )
 
   return (
-    <div style={{ display: 'flex', gap: '2rem', flexDirection: 'column', padding: '2rem' }}>
-      <div style={{ display: 'flex', placeContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+    <Stack gap="xl" padding="xl">
+      <FlexBox placeItems="center" gap="md" wrap>
         <Search />
-        <div style={{ display: 'flex', gap: '.5rem' }}>
+        <FlexBox gap="sm">
           Sort by <SortSelector />
-        </div>
-      </div>
-      <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+        </FlexBox>
+      </FlexBox>
+      <FlexBox gap="md" justifyContent="center">
         {filters.length === 0 && 
             <div style={{ display: 'flex', gap: '.5rem' }} title="Groups images by same seed and prompt">
               Group variations
@@ -97,13 +100,13 @@ const App = () => {
         {filters.map(([key, value]) =>
           <FilterPill key={`${key}+${value}`} type={key.replace(/^filter-/, '')} value={value} />
         )}
-      </div>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '2rem'}}>
+      </FlexBox>
+      <FlexBox gap="xl" wrap>
         {filteredImages.sort(sortBy(sort)).map(image => 
           <Image {...image} key={image.file} /> 
         )}
-      </div>
-    </div>
+      </FlexBox>
+    </Stack>
   )
 }
 

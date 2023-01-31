@@ -1,4 +1,5 @@
 import { useSearchParams } from 'react-router-dom'
+import { Box } from './Box'
 
 type Props = {
     type: string
@@ -17,7 +18,7 @@ const FilterPill = ({ type, value }: Props) => {
         setSearchParams(searchParams)
     }
 
-    return <div onClick={handleClick} title={`Remove ${type} filter`} style={{ 
+    return <Box onClick={handleClick} title={`Remove ${type} filter`} style={{ 
         border: '1px solid',
         borderRadius: '.5rem',
         padding: '.25rem .5rem',
@@ -31,7 +32,7 @@ const FilterPill = ({ type, value }: Props) => {
         {type == 'steps' && '🚶'}
         {' '}
         {value}
-    </div>
+    </Box>
 }
 
 export default FilterPill

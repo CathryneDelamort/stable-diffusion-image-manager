@@ -1,5 +1,8 @@
 import metadata from './metadata.json'
 import Filterable from './Filterable'
+import { Box } from './Box'
+import { FlexBox } from './FlexBox'
+import { Stack } from './Stack'
 
 type Props = typeof metadata[0] 
 
@@ -11,16 +14,18 @@ const Image = ({
     steps, 
     seed, 
     sampler,
-}: Props) => <div style={{ width: '200px'}}>
+}: Props) => <Box style={{ width: '200px'}}>
     <a href={`/images/${file}`} target="_blank" style={{ display: 'block'}}>
         <img src={`/images/${file}`} style={{ width: '200px' }} />
     </a>
-    <div style={{ display: 'flex', justifyContent: 'center', gap: '.5rem', flexDirection: 'column' }}>
-        <div title={`Model`}>{model}</div>
-        <div>
+    <Stack justifyContent="center" gap="sm">
+        <Box title={`Model`}>
+            <Filterable type="model">{model}</Filterable>
+        </Box>
+        <Box>
             <Filterable type="seed">{seed}</Filterable>
-        </div>
-        <div>
+        </Box>
+        <Box>
             <Filterable type="sampler">{sampler}</Filterable> |{' '}
             <Filterable type="steps" value={steps}>{steps} steps</Filterable> |{' '}
             <span title="Classified Free Guidance Scale">
@@ -28,11 +33,11 @@ const Image = ({
                     {cfg} cfg
                 </Filterable>
             </span>
-        </div>
-        <div>
+        </Box>
+        <Box>
             <Filterable type="prompt">{prompt}</Filterable>
-        </div>
-    </div>
-</div>
+        </Box>
+    </Stack>
+</Box>
 
 export default Image

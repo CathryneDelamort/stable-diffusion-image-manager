@@ -1,5 +1,6 @@
 import { createContext, PropsWithChildren, useContext, useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
+import { FlexBox } from './FlexBox'
 
 const SearchContext = createContext({ search: '', setSearch: (search: string) => {}})
 
@@ -21,7 +22,7 @@ const Search = () => {
   const [searchParams, setSearchParams] = useSearchParams()
   const { search, setSearch } = useContext(SearchContext)
 
-  return <div style={{ display: 'flex', gap: '.5rem' }}>
+  return <FlexBox gap="sm">
     Search
     <input 
       type="text" 
@@ -34,7 +35,7 @@ const Search = () => {
         setSearch(value)
       }}
     />
-  </div>
+  </FlexBox>
 }
 
 export const useSearch = (): string => useContext(SearchContext).search
