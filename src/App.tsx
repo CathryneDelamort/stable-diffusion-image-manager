@@ -24,11 +24,11 @@ const imageGroups = images.reduce(
 const getImageGroup = (image: ImageMetadata) => imageGroups[getGroupKey(image)]
 
 function App() {
-  const [searchParams] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams()
   const sort = searchParams.get('sort') || '-created'
+  const groupImages = searchParams.get('groupImages') == 'true' || false
   const [search, setSearch] = useState('')
   const [seedFilter, setSeedFilter] = useState('')
-  const [groupImages, setGroupImages] = useState(false)
   const [samplerFilter, setSamplerFilter] = useState('')
   const debouncedPromptFilter = useDebounce(search, 500);
   const [filteredImages, setFilteredImages] = useState(images)
@@ -72,7 +72,15 @@ function App() {
         {!pillFilterApplied && 
             <div style={{ display: 'flex', gap: '.5rem' }} title="Groups images by same seed and prompt">
               Group similar images
-              <input type="checkbox" checked={groupImages} onChange={e => setGroupImages(e.target.checked)} />
+              <input 
+                type="checkbox" 
+                checked={groupImages} 
+                onChange={e => {
+                  searchParams.delete('groupImages')
+                  if(e.target.checked) searchParams.append('groupImages', 'true')
+                  setSearchParams(searchParams)
+                }}
+              />
             </div>
           }
         {seedFilter &&

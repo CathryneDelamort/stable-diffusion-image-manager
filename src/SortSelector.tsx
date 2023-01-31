@@ -3,7 +3,10 @@ import { useSearchParams } from "react-router-dom"
 const SortSelector = () => {
     const [searchParams, setSearchParams] = useSearchParams()
     return <select 
-        onChange={e => setSearchParams({ sort: e.target.value })} 
+        onChange={e => {
+            searchParams.set('sort', e.target.value)
+            setSearchParams(searchParams)
+        }} 
         value={searchParams.get('sort') || '-created'}
     >
         <option value="created">Created ⬆</option>
