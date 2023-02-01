@@ -105,7 +105,7 @@ const App = () => {
             <select onChange={e => handleCheckedImagesAction(e.target.value)}>
               <option>{checkedImages.length} checked images{' '}</option>
               <option value="uncheck">Uncheck {checkedImages.length} images</option>
-              <option value="generated">Return {checkedImages.length} images to generated</option>
+              <option value="images">Return {checkedImages.length} images to generated</option>
               <option value="review">Review {checkedImages.length} images</option>
               <option value="queue">Queue {checkedImages.length} images</option>
               <option value="archive">Archive {checkedImages.length} images</option>
