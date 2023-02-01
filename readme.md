@@ -10,6 +10,8 @@ This self-hosted app makes it easy to view and compare images generated with Sta
 * Filter to show only images for a given seed or sampler
 * View image metadata under each one and quickly filter by any aspect
 
+![Screenshot](./screenshot.png)
+
 ## Prerequisites
 
 1. [NodeJS](https://nodejs.org/) must be installed on your machine. This was
@@ -28,7 +30,7 @@ downloading and extracting a `zip` file of the contents.
     * Option 1: Setting Stable Diffusion to output to `public/images`
         1. Create an `images` folder under the `public` folder of this repository
         1. Go to the the "Settings" tab of [stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) and go to the "Paths for saving" section
-        2. Enter the full path on your machine to the `public/images` folder in this repository 
+        2. Enter the full path on your machine to the `public/images` folder in this repository
             * Example: `/home/your-username/repos/stable-diffusion-image-manager/public/images`)
     * Option 2: Create a symlink at `public/images` pointing to your existing output folder
         * Example on linux: `ln -s /home/your-username/stable-diffusion-webui/outputs/txt2-img-images public/images`
@@ -36,7 +38,7 @@ downloading and extracting a `zip` file of the contents.
 
 ## Starting the Application
 
-1. Open a terminal and navigate to the folder to which you cloned or extracted 
+1. Open a terminal and navigate to the folder to which you cloned or extracted
 the code from this repository.
 2. Run `yarn start` in the terminal and wait until you see `Local: http://localhost:5173/` in the output
 3. Open your web browser to http://localhost:5173/
@@ -45,7 +47,7 @@ the code from this repository.
 
 The following features are planned in the approximate order they are listed:
 
-* Multi-dimensional grid to easily compare seed, prompt, sampler, steps, etc. 
+* Multi-dimensional grid to easily compare seed, prompt, sampler, steps, etc.
 * Online demo
 * Read PNG metadata from image files themselves instead of from text files
 * Add notes and custom tags to images that can be use for searching and filtering
