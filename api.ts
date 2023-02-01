@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express'
 import bodyParser from 'body-parser'
 import { mkdirSync, renameSync, readFileSync, readdirSync, statSync } from 'fs'
+import { ImageData } from './src/Image'
 import { join, resolve } from 'path'
 import { existsSync } from 'fs'
 
@@ -32,7 +33,10 @@ const readFolder = (folder: string) => {
               try {
                   const details = lines[2].split(', ')
                   const size = details[5]?.replace(/Size: /, '')
-                  const getDetail = (field: string) => details.find((s: string) => s.match(`^${field}: `))?.replace(new RegExp(`^${field}: `), '')
+                  const getDetail = (field: string) => (details.find((s: string) => s.match(`^${field}: `)) || '')
+                    .replace(new RegExp(`^${field}: `), '')
+                    .replace(/(\s|\r|\n)+$/, '')
+                  const [width, height] = size.split('x')
                   const metaData = {
                       file,
                       seed: getDetail('Seed'),
@@ -42,7 +46,8 @@ const readFolder = (folder: string) => {
                       sampler: getDetail('Sampler'),
                       steps: parseInt(getDetail('Steps')),
                       cfg: parseFloat(getDetail('CFG scale')),
-                      width: getDetail('Steps'),
+                      width,
+                      height,
                       size,
                       created: statSync(txtPath).ctimeMs,
                       denoise: getDetail('Denoising strength'),
@@ -57,11 +62,11 @@ const readFolder = (folder: string) => {
           }
       }
       return acc
-  }, [])
+  }, [] as ImageData[])
 }
 
 app.get('/api/images', (req: Request, res: Response) => {
-  const images = readFolder(req.query.folder || 'images');
+  const images = readFolder(req.query.folder + '' || 'images');
   res.send(JSON.stringify(images))
 })
 

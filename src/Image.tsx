@@ -7,14 +7,14 @@ export type ImageData = {
   file: string
   seed: string
   prompt: string
-  styles: string
   model: string
   sampler: string
-  steps: string
-  cfg: string
+  steps: number
+  cfg: number
   width: string
   height: string
-  created: string
+  created: number,
+  details: any
 }
 
 type Props = ImageData & {
