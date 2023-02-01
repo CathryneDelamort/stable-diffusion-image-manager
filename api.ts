@@ -1,8 +1,8 @@
 import express, { Request, Response } from 'express'
 import bodyParser from 'body-parser'
 import { mkdirSync, renameSync, readFileSync, readdirSync, statSync } from 'fs'
-import { ImageData } from './src/ListView/Image'
-import { join, resolve } from 'path'
+import type { ImageData } from './src/types/ImageData.type'
+import { join } from 'path'
 import { existsSync } from 'fs'
 
 const app = express()
@@ -31,7 +31,10 @@ const readFolder = (folder: string) => {
           if(existsSync(txtPath)) {
               const lines = readFileSync(txtPath, {encoding:'utf8', flag:'r'}).split('\n')
               try {
-                  const details = lines[2].split(', ')
+                  const details = lines.reduce(
+                      (acc, line) => acc.concat(line.split(', ')),
+                      [] as string[]
+                  )
                   const size = details[5]?.replace(/Size: /, '')
                   const getDetail = (field: string) => (details.find((s: string) => s.match(`^${field}: `)) || '')
                     .replace(new RegExp(`^${field}: `), '')

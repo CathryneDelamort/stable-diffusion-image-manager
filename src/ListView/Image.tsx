@@ -2,20 +2,7 @@ import { useSearchParams } from 'react-router-dom'
 import Filterable from './Filterable'
 import { Box } from '../layout/Box'
 import { Stack } from '../layout/Stack'
-
-export type ImageData = {
-  file: string
-  seed: string
-  prompt: string
-  model: string
-  sampler: string
-  steps: number
-  cfg: number
-  width: string
-  height: string
-  created: number,
-  details: any
-}
+import type { ImageData } from '../types/ImageData.type'
 
 type Props = ImageData & {
   onCheckChanged: (fileName: string, checked: boolean) => void,
