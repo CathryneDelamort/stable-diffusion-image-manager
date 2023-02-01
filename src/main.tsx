@@ -5,7 +5,7 @@ import {
 } from "react-router-dom"
 import App from './App'
 import './index.css'
-import { SearchProvider } from './Search'
+import { SearchProvider } from './ListView/Search'
 import { themeClass } from './styles.css'
 
 

@@ -1,4 +1,4 @@
-import { Box } from './Box'
+import { Box } from '../layout/Box'
 
 const BackToTop = () =>
   <Box

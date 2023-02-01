@@ -1,7 +1,7 @@
 import { useSearchParams } from 'react-router-dom'
 import Filterable from './Filterable'
-import { Box } from './Box'
-import { Stack } from './Stack'
+import { Box } from '../layout/Box'
+import { Stack } from '../layout/Stack'
 
 export type ImageData = {
   file: string

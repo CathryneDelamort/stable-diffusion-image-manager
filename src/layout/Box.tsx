@@ -1,7 +1,7 @@
 // import { CSSProperties, forwardRef, PropsWithChildren } from 'react'
 import { style as createStyle } from '@vanilla-extract/css'
 import { createElement, ElementType, forwardRef, HTMLAttributes, PropsWithChildren } from 'react'
-import { sprinkles, Sprinkles } from './styles.css'
+import { sprinkles, Sprinkles } from '../styles.css'
 
 export type Style = Parameters<typeof createStyle>[0]
 

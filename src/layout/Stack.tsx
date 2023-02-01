@@ -1,5 +1,5 @@
 import { ComponentProps, forwardRef } from 'react'
-import { FlexBox } from './FlexBox'
+import { FlexBox } from '../ListView/FlexBox'
 
 type StackProps = Omit<ComponentProps<typeof FlexBox>, 'direction' | 'wrap'>
 

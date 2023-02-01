@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express'
 import bodyParser from 'body-parser'
 import { mkdirSync, renameSync, readFileSync, readdirSync, statSync } from 'fs'
-import { ImageData } from './src/Image'
+import { ImageData } from './src/ListView/Image'
 import { join, resolve } from 'path'
 import { existsSync } from 'fs'
 
