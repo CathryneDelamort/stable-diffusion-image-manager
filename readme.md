@@ -2,6 +2,8 @@
 
 This self-hosted app makes it easy to view and compare images generated with Stable Diffusion, specifically designed to work with [AUTOMATIC1111/stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui). It is inspired by the [image history extension](https://github.com/yfszzx/stable-diffusion-webui-images-browser) extension, but is currently a stand-alone application rather than fully integrated into [stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) as an extension. That _may_ happen in the future, but no promises.
 
+![Screenshot](./screenshot.png)
+
 ## Features
 
 * Sort images by creation time, seed, prompt, number of steps, etc.
@@ -9,8 +11,6 @@ This self-hosted app makes it easy to view and compare images generated with Sta
 * Filter images by prompt keywords
 * Filter to show only images for a given seed or sampler
 * View image metadata under each one and quickly filter by any aspect
-
-![Screenshot](./screenshot.png)
 
 ## Prerequisites
 
