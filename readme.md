@@ -26,15 +26,6 @@ downloading and extracting a `zip` file of the contents.
     1. Go to the the "Settings" tab of [stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) and go to the "Saving images/grids" section
     2. Check `Create a text file next to every image with generation parameters`
     3. Apply the settings
-6. Connect your Stable Diffusion output folder to the `public/images` folder of this repository by:
-    * Option 1: Setting Stable Diffusion to output to `public/images`
-        1. Create an `images` folder under the `public` folder of this repository
-        1. Go to the the "Settings" tab of [stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) and go to the "Paths for saving" section
-        2. Enter the full path on your machine to the `public/images` folder in this repository
-            * Example: `/home/your-username/repos/stable-diffusion-image-manager/public/images`)
-    * Option 2: Create a symlink at `public/images` pointing to your existing output folder
-        * Example on linux: `ln -s /home/your-username/stable-diffusion-webui/outputs/txt2-img-images public/images`
-7. Generate some new images and ensure they show up in `public/images` along with their associated `.txt` file
 
 ## Starting the Application
 

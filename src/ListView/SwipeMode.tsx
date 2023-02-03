@@ -1,6 +1,6 @@
 import { Box } from "../layout/Box"
 import { Stack } from "../layout/Stack"
-import { type ImageData } from './Image'
+import type { ImageData } from "../types/ImageData.type"
 import { useSwipeable } from "react-swipeable"
 import { useState } from "react"
 
@@ -30,6 +30,8 @@ const SwipeMode = ({ folder, images, onClose, onAction}: Props) => {
     setSwipeImages(swipeImages.filter(i => i.file !== file))
   }
   const { file, prompt } = swipeImages[index]
+  const imgSrc = '/' + ['images', folder, file].filter(f => f).join('/')
+
   return <Stack
     position="fixed"
     alignItems="center"
@@ -39,7 +41,7 @@ const SwipeMode = ({ folder, images, onClose, onAction}: Props) => {
   >
     <Box>← Delete | ↑ Skip | ↓ Previous | → Review</Box>
     <Box {...handlers}>
-      <img src={`/${folder}/${file}`} style={{ maxWidth: '100vw' }} />
+      <img src={imgSrc} style={{ maxWidth: '100vw' }} />
     </Box>
     <Box style={{ textAlign: 'center' }} paddingX="md">{prompt}</Box>
     <Box position="absolute" style={{ top: '1rem', right: '1rem' }}>

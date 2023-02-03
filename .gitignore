@@ -24,12 +24,4 @@ dist-ssr
 *.sw?
 
 public/images
-public/review
-public/queue
-public/archive
-public/trash
-src/images.json
-src/review.json
-src/queue.json
-src/archive.json
-src/trash.json
+settings.json

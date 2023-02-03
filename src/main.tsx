@@ -4,19 +4,19 @@ import {
   BrowserRouter as Router
 } from "react-router-dom"
 import App from './App'
+import { DataProvider } from './DataProvider'
 import './index.css'
-import { SearchProvider } from './ListView/Search'
 import { themeClass } from './styles.css'
 
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <Router>
-      <SearchProvider>
+      <DataProvider>
         <div className={themeClass}>
           <App />
         </div>
-      </SearchProvider>
+      </DataProvider>
     </Router>
   </React.StrictMode>,
 )

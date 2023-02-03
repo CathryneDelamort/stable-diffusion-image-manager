@@ -7,12 +7,13 @@ import FilterPill from './FilterPill'
 import SortSelector from './SortSelector'
 import Search, { useSearch } from './Search'
 import { Box } from '../layout/Box'
-import { FlexBox } from './FlexBox'
+import { FlexBox } from '../layout/FlexBox'
 import { Stack } from '../layout/Stack'
 import { useEffect, useState } from 'react'
 import FolderSelector from './FolderSelector'
 import BackToTop from './BackToTop'
 import SwipeMode from './SwipeMode'
+import { useFolder } from '../DataProvider'
 
 function removeItem<T>(arr: Array<T>, value: T): Array<T> {
   const index = arr.indexOf(value);
@@ -29,7 +30,7 @@ const ListView = () => {
   const [images, setImages] = useState<ImageData[]>([])
   const search = useSearch()
   const sort = searchParams.get('sort') || '-created'
-  const folder = searchParams.get('folder') || 'images'
+  const [folder] = useFolder()
   const filters = Array.from(searchParams)
     .filter(([key]) => key.match(/^filter-/))
     .map(([key, value]) => [key.replace(/^filter-/, ''), value]) as Array<[keyof ImageData, string]>

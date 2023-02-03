@@ -1,17 +1,14 @@
 import { useSearchParams } from "react-router-dom"
+import { useFolder } from "../DataProvider"
 
 const FolderSelector = () => {
-  const [searchParams, setSearchParams] = useSearchParams()
-  const folder = searchParams.get('folder') || 'images'
+  const [folder, setFolder] = useFolder()
 
   return <select
-    onChange={e => {
-      searchParams.set('folder', e.target.value)
-      setSearchParams(searchParams)
-    }}
+    onChange={e => setFolder(e.target.value)}
     value={folder}
   >
-    <option value="images">Generated</option>
+    <option value="">Generated</option>
     <option value="review">Review</option>
     <option value="queue">Queue</option>
     <option value="archive">Archive</option>

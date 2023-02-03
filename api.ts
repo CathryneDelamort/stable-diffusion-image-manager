@@ -1,33 +1,40 @@
 import express, { Request, Response } from 'express'
 import bodyParser from 'body-parser'
-import { mkdirSync, renameSync, readFileSync, readdirSync, statSync } from 'fs'
+import { 
+  mkdirSync, 
+  renameSync, 
+  readFileSync, 
+  readdirSync, 
+  statSync, 
+  lstatSync, 
+  symlinkSync, 
+  unlinkSync,
+  writeFileSync
+} from 'fs'
 import type { ImageData } from './src/types/ImageData.type'
 import { join } from 'path'
 import { existsSync } from 'fs'
+import defaultSettings from './src/settings.default.json'
+import SettingsView from './src/SettingsView'
+
+const SETTINGS_FILE_PATH = './settings.json'
+const PUBLIC_IMAGE_DIR = './public/images'
+
+const readSettings = () => {
+  if(!existsSync(SETTINGS_FILE_PATH)) writeSettings(defaultSettings)
+  return JSON.parse(readFileSync(SETTINGS_FILE_PATH, 'utf-8'))
+}
+const writeSettings = (settings: any) => writeFileSync(SETTINGS_FILE_PATH, JSON.stringify(settings, null, 2))
 
 const app = express()
 app.use(bodyParser.json())
 
-const moveImage = (file: string, dest: string) => {
-  try {
-    renameSync(join('public', file), join(dest + '/' + file))
-    const txtFile = file.replace(/\.png/, '.txt')
-    if(existsSync('public/' + txtFile)) {
-      renameSync('public/' + txtFile, dest + '/' + txtFile)
-    }
-  }
-  catch(e) {
-    console.log('Error deleting', file)
-    console.log(e)
-  }
-}
-
 const readFolder = (folder: string) => {
-  const IMAGE_PATH = join('./public/', folder)
-  mkdirSync(IMAGE_PATH, { recursive: true })
+  const IMAGE_PATH = join(PUBLIC_IMAGE_DIR, folder)
+  updateImagesSymlink()
   return readdirSync(IMAGE_PATH).reduce((acc, file) => {
       if(file.match(/\.png$/)) {
-          const txtPath = join(IMAGE_PATH, file).replace(/\.png/, '.txt')
+          const txtPath = join(IMAGE_PATH, file).replace(/\.png/, '.txt') + ''
           if(existsSync(txtPath)) {
               const lines = readFileSync(txtPath, {encoding:'utf8', flag:'r'}).split('\n')
               try {
@@ -68,14 +75,47 @@ const readFolder = (folder: string) => {
   }, [] as ImageData[])
 }
 
+const updateImagesSymlink = () => {
+  const { imagePath } = readSettings()
+  if(imagePath) {
+    if(!existsSync(PUBLIC_IMAGE_DIR)) {
+      symlinkSync(imagePath, PUBLIC_IMAGE_DIR, 'dir')
+    }
+    else if(lstatSync(PUBLIC_IMAGE_DIR).isSymbolicLink()) {
+      unlinkSync(PUBLIC_IMAGE_DIR)
+      symlinkSync(imagePath, PUBLIC_IMAGE_DIR, 'dir')
+    }  
+  }
+}
+
+app.get('/api/settings', (req: Request, res: Response) => {
+  if(!existsSync(SETTINGS_FILE_PATH)) writeSettings(defaultSettings)
+  updateImagesSymlink()
+  res.send(JSON.stringify(readSettings()))
+})
+
+app.post('/api/settings', (req: Request, res: Response) => {
+  const { imagePath } = req.body
+  const errors = []
+  if(existsSync(req.body.imagePath)) {
+    writeSettings({ ...SettingsView, imagePath})
+    updateImagesSymlink()
+    res.send(JSON.stringify(readSettings()))
+  }
+  else {
+    res.status(403)
+    res.send(`Unable to find the directory "${imagePath}" on the system. Please check the file path and try again.`)
+  }
+})
+
 app.get('/api/images', (req: Request, res: Response) => {
-  const images = readFolder(req.query.folder + '' || 'images');
+  const images = readFolder(req.query.folder + '');
   res.send(JSON.stringify(images))
 })
 
 app.post('/api/move', ({ body: { from, to, images }}: Request, res: Response) => {
-  const fromDir = join('public', from)
-  const toDir = join('public', to)
+  const fromDir = join(PUBLIC_IMAGE_DIR, from)
+  const toDir = join(PUBLIC_IMAGE_DIR, to)
   mkdirSync(toDir, { recursive: true})
   images.forEach((file: string) => {
     try {
