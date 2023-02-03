@@ -1,6 +1,6 @@
 import { sortBy } from 'sort-by-typescript'
 import { findBestMatch } from 'string-similarity'
-import { useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import Image from './Image'
 import type { ImageData } from '../types/ImageData.type'
 import FilterPill from './FilterPill'
@@ -14,6 +14,7 @@ import FolderSelector from './FolderSelector'
 import BackToTop from './BackToTop'
 import SwipeMode from './SwipeMode'
 import { useFolder } from '../DataProvider'
+import AppBar from '../AppBar'
 
 function removeItem<T>(arr: Array<T>, value: T): Array<T> {
   const index = arr.indexOf(value);
@@ -84,7 +85,15 @@ const ListView = () => {
   }, [folder])
 
   return (
-    <Stack gap="xl" paddingY="xl">
+    <Stack gap="xl">
+      {!swipeMode && 
+        <AppBar title="Images">
+          <Stack flexDirection="row" gap="sm">
+            <button onClick={() => setSwipeMode(true)}>👆</button>
+            <Link to="settings"><button>⚙️</button></Link>
+          </Stack>
+        </AppBar>
+      }
       {swipeMode &&
         <SwipeMode
           folder={folder}
@@ -101,7 +110,6 @@ const ListView = () => {
         <FlexBox gap="sm">
           Sort by <SortSelector />
         </FlexBox>
-        <button onClick={() => setSwipeMode(true)}>Swipe Mode</button>
         {checkedImages.length > 0 &&
           <Box position="fixed" style={{ top: 0, right: 0, backgroundColor: '#444', zIndex: 9999, borderBottomLeftRadius: '1rem', border: '1px solid', borderTop: 'none', borderRight: 'none' }} paddingY="lg" paddingX="xl">
             <select onChange={e => handleCheckedImagesAction(e.target.value)}>

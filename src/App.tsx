@@ -1,4 +1,4 @@
-import { useLocation, redirect, useNavigate} from 'react-router-dom'
+import { useLocation, useNavigate} from 'react-router-dom'
 import { useSettings } from './DataProvider'
 import { FlexBox } from './layout/FlexBox'
 import ListView from './ListView'
@@ -14,9 +14,6 @@ const App = () => {
   }
   
   return <>
-    <FlexBox padding="md" justifyContent="flex-end">
-      <Link to="/settings">⚙️</Link>
-    </FlexBox>
     <Routes>
       <Route path="/" element={<ListView />} />
       <Route path="/settings" element={<SettingsView />} />

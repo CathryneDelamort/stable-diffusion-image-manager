@@ -4,6 +4,7 @@ import { Box } from "../layout/Box"
 import { Stack } from "../layout/Stack"
 import { FlexBox } from "../layout/FlexBox"
 import { Link, useNavigate } from "react-router-dom"
+import AppBar from "../AppBar"
 
 const SettingsView = () => {
     const settings = useSettings()
@@ -30,37 +31,43 @@ const SettingsView = () => {
             })
     }
 
-    return <FlexBox padding="md" justifyContent="flex-start">
-        <form onSubmit={(e) => {
-            e.preventDefault()
-            handleSave()
-        }}>
-            <Stack gap="xl">
-                <h1>Settings</h1>
-                <Stack gap="sm">
-                    <strong>Image Path</strong>
-                    <input value={imagePath} onChange={e => setImagePathValue(e.target.value)} />
-                    <Box>
-                        This is the path to where your Stable Diffusion images are stored (e.g <em>/home/someuser/stablediffusion/output</em>)
-                    </Box>
+    return <>
+        <AppBar title="Settings">
+            {settings.imagePath && 
+                <Link to="/"><button>X</button></Link>
+            }
+        </AppBar>
+        <FlexBox justifyContent="flex-start" padding="md">
+            <form onSubmit={(e) => {
+                e.preventDefault()
+                handleSave()
+            }}>
+                <Stack gap="xl">
+                    <Stack gap="sm">
+                        <strong>Image Path</strong>
+                        <input value={imagePath} onChange={e => setImagePathValue(e.target.value)} />
+                        <Box>
+                            This is the path to where your Stable Diffusion images are stored (e.g <em>/home/someuser/stablediffusion/output</em>)
+                        </Box>
+                    </Stack>
+                    {!settings.imagePath && <Box>
+                        ⛔️ Image path must be defined in order to show your images
+                    </Box>}
+                    {error && <Box>⛔️ {error}</Box>}
+                    <Stack flexDirection="row" gap="md" justifyContent="flex-end">
+                        <button type="submit" disabled={!imagePath || imagePath == settings.imagePath} onClick={handleSave}>
+                            Save
+                        </button>
+                        {settings.imagePath &&
+                            <Link to="/">
+                                <button>Cancel</button>
+                            </Link>
+                        }
+                    </Stack>
                 </Stack>
-                {!settings.imagePath && <Box>
-                    ⛔️ Image path must be defined in order to show your images
-                </Box>}
-                {error && <Box>⛔️ {error}</Box>}
-                <Stack flexDirection="row" gap="md" justifyContent="flex-end">
-                    <button type="submit" disabled={!imagePath || imagePath == settings.imagePath} onClick={handleSave}>
-                        Save
-                    </button>
-                    {settings.imagePath &&
-                        <Link to="/">
-                            <button>Cancel</button>
-                        </Link>
-                    }
-                </Stack>
-            </Stack>
-        </form>
-    </FlexBox>
+            </form>
+        </FlexBox>
+    </>
 }
 
 export default SettingsView
