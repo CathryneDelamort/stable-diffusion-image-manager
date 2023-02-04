@@ -3,7 +3,7 @@ import { Box } from '../layout/Box'
 import { Stack } from '../layout/Stack'
 import type { ImageData } from '../types/ImageData.type'
 import { useFolder } from '../DataProvider'
-import { useCheckedImages } from './ImagesProvider'
+import { useCheckedImages, useHideDetails } from './ImagesProvider'
 
 type Props = ImageData & {
   checked: boolean
@@ -28,6 +28,7 @@ const Image = ({
   const [checkedImages, setCheckedImages] = useCheckedImages()
   const [folder] = useFolder()
   const imgSrc = '/' + ['images', folder, file].filter(f => f).join('/')
+  const [hideDetails] = useHideDetails()
 
   const handleImageChecked = (file: string, checked: boolean) => {
     if(checked) setCheckedImages(checkedImages.concat([file]))
@@ -47,26 +48,28 @@ const Image = ({
         <img src={imgSrc} style={{ maxWidth: '100%', maxHeight: '100%', display: 'block' }} />
       </a>
     </Box>
-    <Stack justifyContent="center" gap="sm">
-      <Box title={`Model`}>
-        Model hash: <Filterable type="model">{model}</Filterable>
-      </Box>
-      <Box>
-        <Filterable type="seed">{seed}</Filterable>
-      </Box>
-      <Box>
-        <Filterable type="sampler">{sampler}</Filterable> |{' '}
-        <Filterable type="steps" value={steps + ''}>{steps} steps</Filterable> |{' '}
-        <span title="Classified Free Guidance Scale">
-          <Filterable type="cfg" value={cfg + ''}>
-            {cfg} cfg
-          </Filterable>
-        </span>
-      </Box>
-      <Box>
-        <Filterable type="prompt">{prompt}</Filterable>
-      </Box>
-    </Stack>
+    {!hideDetails &&
+      <Stack justifyContent="center" gap="sm">
+        <Box title={`Model`}>
+          Model hash: <Filterable type="model">{model}</Filterable>
+        </Box>
+        <Box>
+          <Filterable type="seed">{seed}</Filterable>
+        </Box>
+        <Box>
+          <Filterable type="sampler">{sampler}</Filterable> |{' '}
+          <Filterable type="steps" value={steps + ''}>{steps} steps</Filterable> |{' '}
+          <span title="Classified Free Guidance Scale">
+            <Filterable type="cfg" value={cfg + ''}>
+              {cfg} cfg
+            </Filterable>
+          </span>
+        </Box>
+        <Box>
+          <Filterable type="prompt">{prompt}</Filterable>
+        </Box>
+      </Stack>
+    }
   </Stack>
 }
 

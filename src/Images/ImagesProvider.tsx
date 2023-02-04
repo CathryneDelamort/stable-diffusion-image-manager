@@ -15,12 +15,15 @@ const ImageContext = createContext({
   setCheckedImages: (images: string[]) => {},
   imagesAreLoading: true,
   moveImages: (imageFiles: string[], to: string) => {},
-  filters: [] as [keyof ImageData, string][]
+  filters: [] as [keyof ImageData, string][],
+  hideDetails: false,
+  setHideDetails: (showDetails: boolean) => {}
 })
 
 export const ImagesProvider = ({ children }: PropsWithChildren) => {
   const [images, setImages] = useState<ImageData[]>([])
-  const [searchParams] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const [hideDetails, setHideDetails] = useState(Boolean(searchParams.get('hideDetails')))
   const [imagesAreLoading, setImagesAreLoading] = useState(true)
   const [folder] = useFolder()
   const [search] = useSearch()
@@ -80,7 +83,14 @@ export const ImagesProvider = ({ children }: PropsWithChildren) => {
       setCheckedImages,
       imagesAreLoading,
       moveImages,
-      filters
+      filters,
+      hideDetails: hideDetails,
+      setHideDetails: (showDetails: boolean) => {
+        if(showDetails) searchParams.set('hideDetails', 'true')
+        else searchParams.delete('hideDetails')
+        setSearchParams(searchParams)
+        setHideDetails(showDetails)
+      }
     }}>
       {children}
     </ImageContext.Provider>
@@ -104,6 +114,11 @@ export const useCheckedImages = (): [string[], (images: string[]) => void] => {
 export const useLoadImages = (): [() => void, boolean] => {
   const ctx = useContext(ImageContext)
   return [ctx.loadImages, ctx.imagesAreLoading]
+}
+
+export const useHideDetails = (): [boolean, (showDetails: boolean) => void] => {
+  const ctx = useContext(ImageContext)
+  return [ctx.hideDetails, ctx.setHideDetails]
 }
 
 export const useMoveImages = () => useContext(ImageContext).moveImages

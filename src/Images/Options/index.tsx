@@ -3,13 +3,15 @@ import Search from './Search'
 import { Box } from '../../layout/Box'
 import { FlexBox } from '../../layout/FlexBox'
 import FolderSelector from './FolderSelector'
+import { useHideDetails } from '../ImagesProvider'
 
 const Options = () => {
+  const [hideDetails, setHideDetails] = useHideDetails()
   return (
     <Box display="grid" paddingX="md">
       <FlexBox 
           placeItems="center"
-          gap="md"
+          gap="lg"
           wrap elevation="1"
           padding="lg"
           background="card"
@@ -20,6 +22,15 @@ const Options = () => {
           </FlexBox>
           <Search />
           <SortSelector />
+          <label htmlFor="hidedetails" style={{ display: 'flex', gap: '.5rem'}}>
+            Hide Details
+            <input 
+              type="checkbox"
+              id="hidedetails"
+              checked={hideDetails}
+              onChange={e => setHideDetails(e.target.checked)}
+            />
+          </label>
       </FlexBox>
     </Box>
   )
