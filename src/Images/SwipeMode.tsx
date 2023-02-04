@@ -37,14 +37,13 @@ const SwipeMode = ({ onClose}: Props) => {
     gap="md"
     style={{ top: 0, left:0, width: '100vw', height: '100vh', backgroundColor: '#333'}}
   >
-    <Box>← Delete | ↑ Skip | ↓ Previous | → Review</Box>
-    <Box {...handlers}>
-      <img src={imgSrc} style={{ maxWidth: '100vw' }} />
-    </Box>
-    <Box style={{ textAlign: 'center' }} paddingX="md">{prompt}</Box>
     <Box position="absolute" style={{ top: '1rem', right: '1rem' }}>
       <button onClick={onClose}>X</button>
     </Box>
+    <Box {...handlers}>
+      <img src={imgSrc} style={{ maxWidth: '100vw' }} />
+    </Box>
+    <Box>← Delete | ↑ Next | ↓ Previous | → Review</Box>
   </Stack>
 }
 
