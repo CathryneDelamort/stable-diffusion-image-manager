@@ -26,10 +26,11 @@ const FilterPill = ({ type, value }: Props) => {
         backgroundColor: '#444'
     }}>
         {type == 'cfg' && 'CFG'}
-        {type == 'prompt' && '💬'}
+        {type == 'faceRestoration' && '🥸'}
         {type == 'model' && '📦'}
-        {type == 'seed' && '🌱'}
+        {type == 'prompt' && '💬'}
         {type == 'sampler' && '👀'}
+        {type == 'seed' && '🌱'}
         {type == 'steps' && '🚶'}
         {' '}
         {value}

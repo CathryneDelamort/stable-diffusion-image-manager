@@ -17,6 +17,7 @@ function removeItem<T>(arr: Array<T>, value: T): Array<T> {
 
 const Image = ({
   cfg,
+  faceRestoration,
   file,
   model,
   prompt,
@@ -35,7 +36,7 @@ const Image = ({
     else setCheckedImages(removeItem(checkedImages, file))
   }
 
-  return <Stack style={{ maxWidth: '30ch' }}>
+  return <Stack style={{ maxWidth: '30ch' }} gap="sm">
     <Box position="relative">
       <Box position="absolute" style={{ top: '1rem', right: '1rem' }}>
         <input
@@ -49,7 +50,7 @@ const Image = ({
       </a>
     </Box>
     {!hideDetails &&
-      <Stack justifyContent="center" gap="sm">
+      <Stack justifyContent="center" gap="xs">
         <Box title={`Model`}>
           Model hash: <Filterable type="model">{model}</Filterable>
         </Box>
@@ -64,6 +65,9 @@ const Image = ({
               {cfg} cfg
             </Filterable>
           </span>
+        </Box>
+        <Box>
+          Face restoration: <Filterable type="faceRestoration">{faceRestoration}</Filterable>
         </Box>
         <Box>
           <Filterable type="prompt">{prompt}</Filterable>
