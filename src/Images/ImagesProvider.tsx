@@ -5,6 +5,9 @@ import type { ImageData } from '../types/ImageData.type'
 import { useFolder } from '../DataProvider'
 import { useSearch } from './Options/Search'
 import { useSearchParams } from 'react-router-dom'
+import { vars } from '../styles.css'
+
+type DisplaySize = keyof typeof vars.width
 
 const ImageContext = createContext({
   images: [] as ImageData[],
@@ -17,7 +20,9 @@ const ImageContext = createContext({
   moveImages: (imageFiles: string[], to: string) => {},
   filters: [] as [keyof ImageData, string][],
   hideDetails: false,
-  setHideDetails: (showDetails: boolean) => {}
+  setHideDetails: (showDetails: boolean) => {},
+  displaySize: 'sm' as DisplaySize,
+  setDisplaySize: (displaySize: DisplaySize) => {}
 })
 
 export const ImagesProvider = ({ children }: PropsWithChildren) => {
@@ -29,6 +34,7 @@ export const ImagesProvider = ({ children }: PropsWithChildren) => {
   const [search] = useSearch()
   const [checkedImages, setCheckedImages] = useState<string[]>([])
   const sort = searchParams.get('sort') || '-created'
+  const [displaySize, setDisplaySize] = useState((searchParams.get('sort') || 'md') as DisplaySize)
   
   const loadImages = (markAsLoading = true) => {
     if(markAsLoading) setImagesAreLoading(true)
@@ -90,7 +96,13 @@ export const ImagesProvider = ({ children }: PropsWithChildren) => {
         else searchParams.delete('hideDetails')
         setSearchParams(searchParams)
         setHideDetails(showDetails)
-      }
+      },
+      setDisplaySize: (displaySize: DisplaySize) => {
+        searchParams.set('displaySize', displaySize)
+        setSearchParams(searchParams)
+        setDisplaySize(displaySize)
+      },
+      displaySize
     }}>
       {children}
     </ImageContext.Provider>
@@ -122,3 +134,8 @@ export const useHideDetails = (): [boolean, (showDetails: boolean) => void] => {
 }
 
 export const useMoveImages = () => useContext(ImageContext).moveImages
+
+export const useDisplaySize = (): [DisplaySize, (displaySize: DisplaySize) => void] => {
+  const ctx = useContext(ImageContext)
+  return [ctx.displaySize, ctx.setDisplaySize]
+}

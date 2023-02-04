@@ -1,8 +1,7 @@
 import { PropsWithChildren, ReactComponentElement, useRef } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { Box } from './layout/Box'
 import { FlexBox } from "./layout/FlexBox"
-import { Stack } from './layout/Stack'
 
 type Props = PropsWithChildren & {
     title: string
@@ -12,7 +11,6 @@ type Props = PropsWithChildren & {
 const AppBar = ({ children, title, buttons }: Props) => {
     const ref = useRef<HTMLDivElement>(null)
     const { pathname } = useLocation()
-    console.log(ref.current?.offsetHeight)
     return <>
         <Box style={{ height: ref.current?.offsetHeight + 'px' }} />
         <FlexBox 

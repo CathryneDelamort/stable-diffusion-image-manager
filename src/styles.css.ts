@@ -17,7 +17,8 @@ export const [themeClass, vars] = createTheme({
     xs: '10ch',
     sm: '15ch',
     md: '30ch',
-    lg: '40ch'
+    lg: '40ch',
+    xl: '60ch'
   },
   colors: {
     card: '#333'

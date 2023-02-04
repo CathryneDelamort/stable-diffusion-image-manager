@@ -24,7 +24,6 @@ const FilterPill = ({ type, value }: Props) => {
   const handleClick = () => {
     const paramKey = `filter-${type}`
     const remaining = searchParams.getAll(paramKey).filter(v => v != value)
-    console.log(remaining)
     searchParams.delete(paramKey)
     remaining.forEach(v => searchParams.append(paramKey, v))
     setSearchParams(searchParams)

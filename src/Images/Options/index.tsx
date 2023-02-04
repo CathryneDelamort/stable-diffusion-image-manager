@@ -4,6 +4,7 @@ import { Box } from '../../layout/Box'
 import { FlexBox } from '../../layout/FlexBox'
 import FolderSelector from './FolderSelector'
 import { useHideDetails } from '../ImagesProvider'
+import SizeSelector from './SizeSelector'
 
 const Options = () => {
   const [hideDetails, setHideDetails] = useHideDetails()
@@ -22,6 +23,7 @@ const Options = () => {
           </FlexBox>
           <Search />
           <SortSelector />
+          <SizeSelector />
           <label htmlFor="hidedetails" style={{ display: 'flex', gap: '.5rem'}}>
             Hide Details
             <input 
