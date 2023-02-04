@@ -34,7 +34,7 @@ export const ImagesProvider = ({ children }: PropsWithChildren) => {
   const [search] = useSearch()
   const [checkedImages, setCheckedImages] = useState<string[]>([])
   const sort = searchParams.get('sort') || '-created'
-  const [displaySize, setDisplaySize] = useState((searchParams.get('sort') || 'md') as DisplaySize)
+  const [displaySize, setDisplaySize] = useState((searchParams.get('displaySize') || 'md') as DisplaySize)
   
   const loadImages = (markAsLoading = true) => {
     if(markAsLoading) setImagesAreLoading(true)

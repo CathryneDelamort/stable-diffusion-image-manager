@@ -16,7 +16,7 @@ export const [themeClass, vars] = createTheme({
     viewport: '100vw',
     xs: '10ch',
     sm: '15ch',
-    md: '30ch',
+    md: '25ch',
     lg: '40ch',
     xl: '60ch'
   },
