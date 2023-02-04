@@ -5,6 +5,7 @@ const types = {
   cfg: { title: 'CFG value', prefix: 'CFG' },
   denoise: { title: 'Denoise strength', prefix: '🔇' },
   faceRestoration: { title: 'Face restoration', prefix: '🥸' },
+  hiresUpscaler: { title: 'Hires upscaler', prefix: '🔎' },
   model: { title: 'Model hash', prefix: '📦' },
   prompt: { title: 'Prompt', prefix: '💬' },
   sampler: { title: 'Sampler', prefix: '👀' },

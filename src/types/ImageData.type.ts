@@ -1,9 +1,11 @@
 export type ImageData = {
   cfg: number
-  created: number,
+  created: number
+  denoise: number
   faceRestoration: string
   file: string
   height: string
+  hiresUpscaler: string
   model: string
   seed: string
   prompt: string

@@ -20,6 +20,7 @@ const Image = ({
   denoise,
   faceRestoration,
   file,
+  hiresUpscaler,
   model,
   prompt,
   steps,
@@ -69,6 +70,9 @@ const Image = ({
         </Box>
         <Box>
           Face restoration: <Filterable type="faceRestoration">{faceRestoration}</Filterable>
+        </Box>
+        <Box>
+          Hires upscaler: <Filterable type="hiresUpscaler">{hiresUpscaler}</Filterable>
         </Box>
         <Box>
           Denoising strength: <Filterable type="denoise">{denoise}</Filterable>
