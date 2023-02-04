@@ -35,40 +35,43 @@ const readFolder = (folder: string) => {
   return readdirSync(IMAGE_PATH).reduce((acc, file) => {
     if (file.match(/\.png$/)) {
       const txtPath = join(IMAGE_PATH, file).replace(/\.png/, '.txt') + ''
-      if (existsSync(txtPath)) {
-        const lines = readFileSync(txtPath, { encoding: 'utf8', flag: 'r' }).split('\n')
-        try {
-          const details = lines.reduce(
-            (acc, line) => acc.concat(line.split(', ')),
-            [] as string[]
-          )
-          const size = details[5]?.replace(/Size: /, '')
-          const getDetail = (field: string) => (details.find((s: string) => s.match(`^${field}: `)) || '')
-            .replace(new RegExp(`^${field}: `), '')
-            .replace(/(\s|\r|\n)+$/, '')
-          const [width, height] = size.split('x')
-          const metaData = {
-            cfg: parseFloat(getDetail('CFG scale')),
-            created: statSync(txtPath).ctimeMs,
-            denoise: getDetail('Denoising strength'),
-            file,
-            height,
-            prompt: lines[0],
-            model: getDetail('Model hash'),
-            negativePrompt: lines[1].replace(/^Negative prompt\s/, ''),
-            seed: getDetail('Seed'),
-            sampler: getDetail('Sampler'),
-            steps: parseInt(getDetail('Steps')),
-            width,
-            size,
-            details
-          }
-          return acc.concat([metaData])
+      const lines = existsSync(txtPath)
+        ? readFileSync(txtPath, { encoding: 'utf8', flag: 'r' }).split('\n')
+        : []
+      try {
+        const details = lines.reduce(
+          (acc, line) => acc.concat(line.split(', ')),
+          [] as string[]
+        )
+        const getDetail = (field: string) => (details.find((s: string) => s.match(`^${field}: `)) || '')
+          ?.replace(new RegExp(`^${field}: `), '')
+          ?.replace(/(\s|\r|\n)+$/, '') || ''
+        const size = getDetail('Size')
+        const [width, height] = size?.split('x') || ['', '']
+        const metaData = {
+          cfg: parseFloat(getDetail('CFG scale')),
+          created: statSync(join(IMAGE_PATH, file)).ctimeMs,
+          denoise: parseFloat(getDetail('Denoising strength')),
+          faceRestoration: getDetail('Face restoration'),
+          file,
+          height,
+          hiresUpscaler: getDetail('Hires upscaler'),
+          prompt: lines[0],
+          model: getDetail('Model hash'),
+          negativePrompt: lines[1]?.replace(/^Negative prompt\s/, ''),
+          seed: getDetail('Seed'),
+          sampler: getDetail('Sampler'),
+          steps: parseInt(getDetail('Steps')),
+          width,
+          size,
+          details
         }
-        catch (e) {
-          console.log('Error reading', txtPath)
-          console.log(lines)
-        }
+        return acc.concat([metaData])
+      }
+      catch (e) {
+        console.log('Error reading', txtPath)
+        console.log(lines)
+        console.log(e)
       }
     }
     return acc

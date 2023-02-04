@@ -54,7 +54,7 @@ export const ImagesProvider = ({ children }: PropsWithChildren) => {
     .map(([key, value]) => [key.replace(/^filter-/, ''), value]) as Array<[keyof ImageData, string]>
 
   const filteredImages = images.filter((image: ImageData) => {
-    const searchTargets = image.prompt.toLowerCase().split(' ')
+    const searchTargets = image.prompt?.toLowerCase().split(' ') || []
     const searchSanitized = search.replace(/^\s*/, '').replace(/\s*$/, '').toLowerCase()
     const promptWords = searchSanitized.split(' ')
     const searchTests = promptWords.filter(word => word.length > 2)
