@@ -40,10 +40,7 @@ const ImagesComponent = () => {
         </AppBar>
       }
       {swipeMode &&
-        <SwipeMode
-          images={filteredImages}
-          onClose={() => { loadImages(); setSwipeMode(false) }}
-        />
+        <SwipeMode onClose={() => { loadImages(); setSwipeMode(false) }} />
       }
       <Options />
       {filters.length > 0 && 

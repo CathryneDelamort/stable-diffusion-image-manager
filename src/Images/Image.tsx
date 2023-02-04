@@ -17,6 +17,7 @@ function removeItem<T>(arr: Array<T>, value: T): Array<T> {
 
 const Image = ({
   cfg,
+  denoise,
   faceRestoration,
   file,
   model,
@@ -68,6 +69,9 @@ const Image = ({
         </Box>
         <Box>
           Face restoration: <Filterable type="faceRestoration">{faceRestoration}</Filterable>
+        </Box>
+        <Box>
+          Denoising strength: <Filterable type="denoise">{denoise}</Filterable>
         </Box>
         <Box>
           <Filterable type="prompt">{prompt}</Filterable>
