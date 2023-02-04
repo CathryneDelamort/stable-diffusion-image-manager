@@ -1,11 +1,15 @@
-import { useSearchParams } from "react-router-dom"
-import { useFolder } from "../DataProvider"
+import { useFolder } from "../../DataProvider"
+import { useImages } from "../ImagesProvider"
 
 const FolderSelector = () => {
   const [folder, setFolder] = useFolder()
+  const [_, setImages] = useImages()
 
   return <select
-    onChange={e => setFolder(e.target.value)}
+    onChange={e => {
+      setImages([])
+      setFolder(e.target.value)
+    }}
     value={folder}
   >
     <option value="">Generated</option>

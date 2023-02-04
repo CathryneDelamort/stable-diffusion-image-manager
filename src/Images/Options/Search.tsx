@@ -1,6 +1,6 @@
 import { createContext, PropsWithChildren, useContext, useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { FlexBox } from '../layout/FlexBox'
+import { FlexBox } from '../../layout/FlexBox'
 
 const SearchContext = createContext({ search: '', setSearch: (search: string) => {}})
 
@@ -38,6 +38,9 @@ const Search = () => {
   </FlexBox>
 }
 
-export const useSearch = (): string => useContext(SearchContext).search
+export const useSearch = (): [string, (search: string) => void] => {
+  const ctx = useContext(SearchContext)
+  return [ctx.search, ctx.setSearch]
+}
 
 export default Search

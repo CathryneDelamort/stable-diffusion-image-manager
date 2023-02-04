@@ -3,10 +3,16 @@ import { Box } from '../layout/Box'
 import { Stack } from '../layout/Stack'
 import type { ImageData } from '../types/ImageData.type'
 import { useFolder } from '../DataProvider'
+import { useCheckedImages } from './ImagesProvider'
 
 type Props = ImageData & {
-  onCheckChanged: (fileName: string, checked: boolean) => void,
   checked: boolean
+}
+
+function removeItem<T>(arr: Array<T>, value: T): Array<T> {
+  const index = arr.indexOf(value)
+  if (index > -1) arr.splice(index, 1)
+  return [...arr]
 }
 
 const Image = ({
@@ -17,23 +23,30 @@ const Image = ({
   steps,
   seed,
   sampler,
-  onCheckChanged,
   checked
 }: Props) => {
+  const [checkedImages, setCheckedImages] = useCheckedImages()
   const [folder] = useFolder()
   const imgSrc = '/' + ['images', folder, file].filter(f => f).join('/')
 
-  return <Box style={{ maxWidth: '40ch' }} position="relative">
-    <Box position="absolute" style={{ top: '1rem', right: '1rem' }}>
-      <input
-        type="checkbox"
-        style={{ height: '1.5rem', width: '1.5rem' }}
-        onChange={e => onCheckChanged(file, e.target.checked)}
-        checked={checked} />
+  const handleImageChecked = (file: string, checked: boolean) => {
+    if(checked) setCheckedImages(checkedImages.concat([file]))
+    else setCheckedImages(removeItem(checkedImages, file))
+  }
+
+  return <Stack style={{ maxWidth: '30ch' }}>
+    <Box position="relative">
+      <Box position="absolute" style={{ top: '1rem', right: '1rem' }}>
+        <input
+          type="checkbox"
+          style={{ height: '1.5rem', width: '1.5rem' }}
+          onChange={e => handleImageChecked(file, e.target.checked)}
+          checked={checked} />
+      </Box>
+      <a href={imgSrc} target="_blank">
+        <img src={imgSrc} style={{ maxWidth: '100%', maxHeight: '100%', display: 'block' }} />
+      </a>
     </Box>
-    <a href={imgSrc} target="_blank" style={{ display: 'block', maxWidth: '40ch', height: '40ch' }}>
-      <img src={imgSrc} style={{ maxWidth: '100%', maxHeight: '100%' }} />
-    </a>
     <Stack justifyContent="center" gap="sm">
       <Box title={`Model`}>
         Model hash: <Filterable type="model">{model}</Filterable>
@@ -54,7 +67,7 @@ const Image = ({
         <Filterable type="prompt">{prompt}</Filterable>
       </Box>
     </Stack>
-  </Box>
+  </Stack>
 }
 
 export default Image

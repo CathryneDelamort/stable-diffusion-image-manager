@@ -3,32 +3,30 @@ import { Stack } from "../layout/Stack"
 import type { ImageData } from "../types/ImageData.type"
 import { useSwipeable } from "react-swipeable"
 import { useState } from "react"
+import { useMoveImages } from "./ImagesProvider"
+import { useFolder } from "../DataProvider"
 
 type Props = {
-  folder: string
   images: ImageData[]
   onClose: () => void,
-  onAction: (diection: 'review' | 'delete' ) => void,
 }
 
-const SwipeMode = ({ folder, images, onClose, onAction}: Props) => {
+const SwipeMode = ({ images, onClose}: Props) => {
   const [swipeImages, setSwipeImages] = useState<ImageData[]>(images)
   const [index, setIndex] = useState(0)
+  const folder = useFolder()
+  const moveImages = useMoveImages()
+  const handleMove = (to: string) => {
+    const file = swipeImages[index].file
+    moveImages([file], to)
+    setSwipeImages(swipeImages.filter(i => i.file !== file))
+  }
   const handlers = useSwipeable({
     onSwipedLeft: () => handleMove('trash'),
     onSwipedRight: () => handleMove('review'),
     onSwipedUp: () => setIndex(index + 1),
     onSwipedDown: () => index > 0 && setIndex(index - 1)
   });
-  const handleMove = (to: string) => {
-    const file = swipeImages[index].file
-    fetch('/api/move', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json'},
-      body: JSON.stringify({ from: folder, to, images: [file] })
-    })
-    setSwipeImages(swipeImages.filter(i => i.file !== file))
-  }
   const { file, prompt } = swipeImages[index]
   const imgSrc = '/' + ['images', folder, file].filter(f => f).join('/')
 

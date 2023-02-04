@@ -10,7 +10,18 @@ export const [themeClass, vars] = createTheme({
 		lg: '1.5rem',
 		xl: '2rem',
 		xxl: '2.5rem'
-	}
+	},
+  width: {
+    full: '100%',
+    viewport: '100vw',
+    xs: '10ch',
+    sm: '15ch',
+    md: '30ch',
+    lg: '40ch'
+  },
+  colors: {
+    card: '#333'
+  }
 })
 
 const responsiveProperties = defineProperties({
@@ -21,7 +32,7 @@ const responsiveProperties = defineProperties({
   },
   defaultCondition: 'mobile',
   properties: {
-    display: ['none', 'flex', 'block', 'inline'],
+    display: ['none', 'flex', 'block', 'inline', 'grid'],
     flexDirection: ['row', 'column'],
     flexWrap: ['nowrap', 'wrap', 'wrap-reverse'],
     justifyContent: [
@@ -43,7 +54,8 @@ const responsiveProperties = defineProperties({
     paddingBottom: vars.space,
     paddingLeft: vars.space,
     paddingRight: vars.space,
-    position: ['absolute', 'relative', 'fixed']
+    position: ['absolute', 'relative', 'fixed'],
+    width: vars.width
   },
   shorthands: {
     direction: ['flexDirection'],
@@ -67,6 +79,14 @@ const colorProperties = defineProperties({
   },
   defaultCondition: 'darkMode',
   properties: {
+    boxShadow: {
+      '1': '0px 0px .5rem #111',
+      '2': '0px 0px .75rem #000'
+    },
+    background: vars.colors
+  },
+  shorthands: {
+    elevation: ['boxShadow']
   }
 })
 

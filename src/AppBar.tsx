@@ -12,6 +12,7 @@ type Props = PropsWithChildren & {
 const AppBar = ({ children, title, buttons }: Props) => {
     const ref = useRef<HTMLDivElement>(null)
     const { pathname } = useLocation()
+    console.log(ref.current?.offsetHeight)
     return <>
         <Box style={{ height: ref.current?.offsetHeight + 'px' }} />
         <FlexBox 
@@ -20,12 +21,12 @@ const AppBar = ({ children, title, buttons }: Props) => {
             ref={ref} 
             justifyContent="space-between"
             alignItems="center"
+            elevation="2"
             style={{
                 top: 0,
                 left: 0,
                 width: '100vw',
                 background: '#222',
-                boxShadow: '0px 0px 10px #000',
                 zIndex: 999
             }}
         >

@@ -1,21 +1,21 @@
 import { useLocation, useNavigate} from 'react-router-dom'
 import { useSettings } from './DataProvider'
 import { FlexBox } from './layout/FlexBox'
-import ListView from './ListView'
+import Images from './Images'
 import SettingsView from './SettingsView'
 import { Link, Routes, Route } from 'react-router-dom'
 
 const App = () => {
-  const { imagePath } = useSettings()
+  const settings = useSettings()
   const navigate = useNavigate()
   const location = useLocation()
-  if(!imagePath && location.pathname != '/settings') {
+  if(settings.loaded && !settings.imagePath && location.pathname != '/settings') {
     navigate('/settings')
   }
   
   return <>
     <Routes>
-      <Route path="/" element={<ListView />} />
+      <Route path="/" element={<Images />} />
       <Route path="/settings" element={<SettingsView />} />
     </Routes>
   </>
