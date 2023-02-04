@@ -1,13 +1,13 @@
 import express, { Request, Response } from 'express'
 import bodyParser from 'body-parser'
-import { 
-  mkdirSync, 
-  renameSync, 
-  readFileSync, 
-  readdirSync, 
-  statSync, 
-  lstatSync, 
-  symlinkSync, 
+import {
+  mkdirSync,
+  renameSync,
+  readFileSync,
+  readdirSync,
+  statSync,
+  lstatSync,
+  symlinkSync,
   unlinkSync,
   writeFileSync
 } from 'fs'
@@ -21,7 +21,7 @@ const SETTINGS_FILE_PATH = './settings.json'
 const PUBLIC_IMAGE_DIR = './public/images'
 
 const readSettings = () => {
-  if(!existsSync(SETTINGS_FILE_PATH)) writeSettings(defaultSettings)
+  if (!existsSync(SETTINGS_FILE_PATH)) writeSettings(defaultSettings)
   return JSON.parse(readFileSync(SETTINGS_FILE_PATH, 'utf-8'))
 }
 const writeSettings = (settings: any) => writeFileSync(SETTINGS_FILE_PATH, JSON.stringify(settings, null, 2))
@@ -33,63 +33,63 @@ const readFolder = (folder: string) => {
   const IMAGE_PATH = join(PUBLIC_IMAGE_DIR, folder)
   updateImagesSymlink()
   return readdirSync(IMAGE_PATH).reduce((acc, file) => {
-      if(file.match(/\.png$/)) {
-          const txtPath = join(IMAGE_PATH, file).replace(/\.png/, '.txt') + ''
-          if(existsSync(txtPath)) {
-              const lines = readFileSync(txtPath, {encoding:'utf8', flag:'r'}).split('\n')
-              try {
-                  const details = lines.reduce(
-                      (acc, line) => acc.concat(line.split(', ')),
-                      [] as string[]
-                  )
-                  const size = details[5]?.replace(/Size: /, '')
-                  const getDetail = (field: string) => (details.find((s: string) => s.match(`^${field}: `)) || '')
-                    .replace(new RegExp(`^${field}: `), '')
-                    .replace(/(\s|\r|\n)+$/, '')
-                  const [width, height] = size.split('x')
-                  const metaData = {
-                      file,
-                      seed: getDetail('Seed'),
-                      prompt: lines[0],
-                      negativePrompt: lines[1].replace(/^Negative prompt\s/, ''),
-                      model: getDetail('Model hash'),
-                      sampler: getDetail('Sampler'),
-                      steps: parseInt(getDetail('Steps')),
-                      cfg: parseFloat(getDetail('CFG scale')),
-                      width,
-                      height,
-                      size,
-                      created: statSync(txtPath).ctimeMs,
-                      denoise: getDetail('Denoising strength'),
-                      details
-                  }
-                  return acc.concat([metaData])
-              }
-              catch(e) {
-                  console.log('Error reading', txtPath)
-                  console.log(lines)
-              }
+    if (file.match(/\.png$/)) {
+      const txtPath = join(IMAGE_PATH, file).replace(/\.png/, '.txt') + ''
+      if (existsSync(txtPath)) {
+        const lines = readFileSync(txtPath, { encoding: 'utf8', flag: 'r' }).split('\n')
+        try {
+          const details = lines.reduce(
+            (acc, line) => acc.concat(line.split(', ')),
+            [] as string[]
+          )
+          const size = details[5]?.replace(/Size: /, '')
+          const getDetail = (field: string) => (details.find((s: string) => s.match(`^${field}: `)) || '')
+            .replace(new RegExp(`^${field}: `), '')
+            .replace(/(\s|\r|\n)+$/, '')
+          const [width, height] = size.split('x')
+          const metaData = {
+            cfg: parseFloat(getDetail('CFG scale')),
+            created: statSync(txtPath).ctimeMs,
+            denoise: getDetail('Denoising strength'),
+            file,
+            height,
+            prompt: lines[0],
+            model: getDetail('Model hash'),
+            negativePrompt: lines[1].replace(/^Negative prompt\s/, ''),
+            seed: getDetail('Seed'),
+            sampler: getDetail('Sampler'),
+            steps: parseInt(getDetail('Steps')),
+            width,
+            size,
+            details
           }
+          return acc.concat([metaData])
+        }
+        catch (e) {
+          console.log('Error reading', txtPath)
+          console.log(lines)
+        }
       }
-      return acc
+    }
+    return acc
   }, [] as ImageData[])
 }
 
 const updateImagesSymlink = () => {
   const { imagePath } = readSettings()
-  if(imagePath) {
-    if(!existsSync(PUBLIC_IMAGE_DIR)) {
+  if (imagePath) {
+    if (!existsSync(PUBLIC_IMAGE_DIR)) {
       symlinkSync(imagePath, PUBLIC_IMAGE_DIR, 'dir')
     }
-    else if(lstatSync(PUBLIC_IMAGE_DIR).isSymbolicLink()) {
+    else if (lstatSync(PUBLIC_IMAGE_DIR).isSymbolicLink()) {
       unlinkSync(PUBLIC_IMAGE_DIR)
       symlinkSync(imagePath, PUBLIC_IMAGE_DIR, 'dir')
-    }  
+    }
   }
 }
 
 app.get('/api/settings', (req: Request, res: Response) => {
-  if(!existsSync(SETTINGS_FILE_PATH)) writeSettings(defaultSettings)
+  if (!existsSync(SETTINGS_FILE_PATH)) writeSettings(defaultSettings)
   updateImagesSymlink()
   res.send(JSON.stringify(readSettings()))
 })
@@ -97,8 +97,8 @@ app.get('/api/settings', (req: Request, res: Response) => {
 app.post('/api/settings', (req: Request, res: Response) => {
   const { imagePath } = req.body
   const errors = []
-  if(existsSync(req.body.imagePath)) {
-    writeSettings({ ...SettingsView, imagePath})
+  if (existsSync(req.body.imagePath)) {
+    writeSettings({ ...SettingsView, imagePath })
     updateImagesSymlink()
     res.send(JSON.stringify(readSettings()))
   }
@@ -113,19 +113,19 @@ app.get('/api/images', (req: Request, res: Response) => {
   res.send(JSON.stringify(images))
 })
 
-app.post('/api/move', ({ body: { from, to, images }}: Request, res: Response) => {
+app.post('/api/move', ({ body: { from, to, images } }: Request, res: Response) => {
   const fromDir = join(PUBLIC_IMAGE_DIR, from)
   const toDir = join(PUBLIC_IMAGE_DIR, to)
-  mkdirSync(toDir, { recursive: true})
+  mkdirSync(toDir, { recursive: true })
   images.forEach((file: string) => {
     try {
       renameSync(join(fromDir, file), join(toDir, file))
       const txtFile = file.replace(/\.png/, '.txt')
-      if(existsSync(join(fromDir, txtFile))) {
+      if (existsSync(join(fromDir, txtFile))) {
         renameSync(join(fromDir, txtFile), join(toDir, txtFile))
       }
     }
-    catch(e) {
+    catch (e) {
       console.log('Error moving', file)
       console.log(e)
     }
