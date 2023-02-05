@@ -19,16 +19,16 @@ const ImageContext = createContext({
   imagesAreLoading: true,
   moveImages: (imageFiles: string[], to: string) => {},
   filters: [] as [keyof ImageData, string][],
-  hideDetails: false,
-  setHideDetails: (showDetails: boolean) => {},
+  show: [] as string[],
+  setShow: (hide: string[]) => {},
   displaySize: 'sm' as DisplaySize,
-  setDisplaySize: (displaySize: DisplaySize) => {}
+  setDisplaySize: (displaySize: DisplaySize) => {},
 })
 
 export const ImagesProvider = ({ children }: PropsWithChildren) => {
   const [images, setImages] = useState<ImageData[]>([])
   const [searchParams, setSearchParams] = useSearchParams()
-  const [hideDetails, setHideDetails] = useState(Boolean(searchParams.get('hideDetails')))
+  const [show, setShow] = useState(searchParams.getAll('show'))
   const [imagesAreLoading, setImagesAreLoading] = useState(true)
   const [folder] = useFolder()
   const [search] = useSearch()
@@ -90,19 +90,19 @@ export const ImagesProvider = ({ children }: PropsWithChildren) => {
       imagesAreLoading,
       moveImages,
       filters,
-      hideDetails: hideDetails,
-      setHideDetails: (showDetails: boolean) => {
-        if(showDetails) searchParams.set('hideDetails', 'true')
-        else searchParams.delete('hideDetails')
-        setSearchParams(searchParams)
-        setHideDetails(showDetails)
-      },
+      displaySize,
       setDisplaySize: (displaySize: DisplaySize) => {
         searchParams.set('displaySize', displaySize)
         setSearchParams(searchParams)
         setDisplaySize(displaySize)
       },
-      displaySize
+      show: show,
+      setShow: (newShow: string[]) => {
+        searchParams.delete('show')
+        newShow.forEach(s => searchParams.append('show', s))
+        setSearchParams(searchParams)
+        setShow(newShow)
+      }
     }}>
       {children}
     </ImageContext.Provider>
@@ -128,14 +128,19 @@ export const useLoadImages = (): [() => void, boolean] => {
   return [ctx.loadImages, ctx.imagesAreLoading]
 }
 
-export const useHideDetails = (): [boolean, (showDetails: boolean) => void] => {
-  const ctx = useContext(ImageContext)
-  return [ctx.hideDetails, ctx.setHideDetails]
-}
-
 export const useMoveImages = () => useContext(ImageContext).moveImages
 
 export const useDisplaySize = (): [DisplaySize, (displaySize: DisplaySize) => void] => {
   const ctx = useContext(ImageContext)
   return [ctx.displaySize, ctx.setDisplaySize]
+}
+
+export const useShow = () => {
+  const [show] = useShowState()
+  return (type: string) => show.indexOf(type) > -1
+}
+
+export const useShowState = (): [string[], (hide: string[]) => void] => {
+  const ctx = useContext(ImageContext)
+  return [ctx.show, ctx.setShow]
 }

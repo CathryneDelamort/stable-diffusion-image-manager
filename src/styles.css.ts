@@ -21,7 +21,7 @@ export const [themeClass, vars] = createTheme({
     xl: '60ch'
   },
   colors: {
-    card: '#333'
+    paper: '#333'
   }
 })
 
@@ -50,6 +50,7 @@ const responsiveProperties = defineProperties({
       'center',
       'flex-end'
     ],
+    borderRadius: vars.space,
     gap: vars.space,
     paddingTop: vars.space,
     paddingBottom: vars.space,

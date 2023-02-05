@@ -3,43 +3,32 @@ import { Box } from '../layout/Box'
 import { Stack } from '../layout/Stack'
 import type { ImageData } from '../types/ImageData.type'
 import { useFolder } from '../DataProvider'
-import { useCheckedImages, useDisplaySize, useHideDetails } from './ImagesProvider'
+import { useCheckedImages, useDisplaySize, useShow } from './ImagesProvider'
 import { vars } from '../styles.css'
+import removeItem from '../removeItem'
+import details from './details'
 
 type Props = ImageData & {
   checked: boolean
   size: keyof typeof vars.width
 }
 
-function removeItem<T>(arr: Array<T>, value: T): Array<T> {
-  const index = arr.indexOf(value)
-  if (index > -1) arr.splice(index, 1)
-  return [...arr]
-}
-
-const Image = ({
-  cfg,
-  denoise,
-  faceRestoration,
-  file,
-  hiresUpscaler,
-  model,
-  prompt,
-  steps,
-  seed,
-  sampler,
-  checked
-}: Props) => {
+const Image = ({ checked, size, ...image  }: Props) => {
+  const {
+    file,
+  } = image
   const [checkedImages, setCheckedImages] = useCheckedImages()
   const [folder] = useFolder()
   const imgSrc = '/' + ['images', folder, file].filter(f => f).join('/')
-  const [hideDetails] = useHideDetails()
   const [displaySize] =  useDisplaySize()
+  const show = useShow()
 
   const handleImageChecked = (file: string, checked: boolean) => {
     if(checked) setCheckedImages(checkedImages.concat([file]))
     else setCheckedImages(removeItem(checkedImages, file))
   }
+
+  const detailsToShow = (Object.keys(details) as (keyof typeof details)[]).filter(show)
 
   return <Stack width={displaySize} gap="sm">
     <Box position="relative">
@@ -54,35 +43,13 @@ const Image = ({
         <img src={imgSrc} style={{ maxWidth: '100%', maxHeight: '100%', display: 'block' }} />
       </a>
     </Box>
-    {!hideDetails &&
+    {detailsToShow.length > 0 && 
       <Stack justifyContent="center" gap="xs">
-        <Box title={`Model`}>
-          Model hash: <Filterable type="model">{model}</Filterable>
-        </Box>
-        <Box>
-          <Filterable type="seed">{seed}</Filterable>
-        </Box>
-        <Box>
-          <Filterable type="sampler">{sampler}</Filterable> |{' '}
-          <Filterable type="steps" value={steps + ''}>{steps} steps</Filterable> |{' '}
-          <span title="Classified Free Guidance Scale">
-            <Filterable type="cfg" value={cfg + ''}>
-              {cfg} cfg
-            </Filterable>
-          </span>
-        </Box>
-        <Box>
-          Face restoration: <Filterable type="faceRestoration">{faceRestoration}</Filterable>
-        </Box>
-        <Box>
-          Hires upscaler: <Filterable type="hiresUpscaler">{hiresUpscaler}</Filterable>
-        </Box>
-        <Box>
-          Denoising strength: <Filterable type="denoise">{denoise}</Filterable>
-        </Box>
-        <Box>
-          <Filterable type="prompt">{prompt}</Filterable>
-        </Box>
+        {detailsToShow.map(key =>
+          <Box title={`Model`} key={key}>
+            {details[key].title}: <Filterable type={key}>{image[key]}</Filterable>
+          </Box>
+        )}
       </Stack>
     }
   </Stack>

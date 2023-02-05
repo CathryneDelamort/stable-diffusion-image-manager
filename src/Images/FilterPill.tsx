@@ -1,20 +1,9 @@
 import { useSearchParams } from 'react-router-dom'
 import { Box } from '../layout/Box'
-
-const types = {
-  cfg: { title: 'CFG value', prefix: 'CFG' },
-  denoise: { title: 'Denoise strength', prefix: '🔇' },
-  faceRestoration: { title: 'Face restoration', prefix: '🥸' },
-  hiresUpscaler: { title: 'Hires upscaler', prefix: '🔎' },
-  model: { title: 'Model hash', prefix: '📦' },
-  prompt: { title: 'Prompt', prefix: '💬' },
-  sampler: { title: 'Sampler', prefix: '👀' },
-  seed: { title: 'Seed', prefix: '🌱' },
-  steps: { title: 'Steps', prefix: '🚶' }
-}
+import details from './details'
 
 type Props = {
-  type: keyof typeof types
+  type: keyof typeof details
   value: string
 }
 
@@ -30,17 +19,14 @@ const FilterPill = ({ type, value }: Props) => {
   }
 
   return <Box
+    paper
     onClick={handleClick}
-    title={`Remove ${types[type].title} filter`}
-    style={{
-      border: '1px solid',
-      borderRadius: '.5rem',
-      padding: '.25rem .5rem',
-      cursor: 'pointer',
-      backgroundColor: '#444'
-    }}
+    title={`Remove ${details[type].title} filter`}
+    paddingX="sm"
+    paddingY="xs"
+    style={{ cursor: 'pointer' }}
   >
-    {types[type].prefix}
+    {details[type].prefix}
     {' '}
     {value}
   </Box>

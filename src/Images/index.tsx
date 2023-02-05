@@ -13,6 +13,7 @@ import { useFolder } from '../DataProvider'
 import AppBar from '../AppBar'
 import Options from './Options'
 import CheckedImages from './CheckedImages'
+import details from './details'
 
 const ImagesComponent = () => {
   const [swipeMode, setSwipeMode] = useState(false)
@@ -46,7 +47,11 @@ const ImagesComponent = () => {
       {filters.length > 0 && 
         <FlexBox gap="md" placeItems="center">
           {filters.map(([key, value]) =>
-            <FilterPill key={`${key}+${value}`} type={key.replace(/^filter-/, '')} value={value} />
+            <FilterPill 
+              key={`${key}+${value}`}
+              type={key.replace(/^filter-/, '') as keyof typeof details}
+              value={value} 
+            />
           )}
         </FlexBox>
       }

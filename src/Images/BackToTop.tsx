@@ -4,7 +4,7 @@ const BackToTop = () =>
   <Box
     position="fixed"
     elevation="1"
-    background="card"
+    background="paper"
     style={{
       bottom: 0,
       right: '1.5rem',
