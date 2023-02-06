@@ -14,6 +14,8 @@ const SortSelector = () => {
     >
       <option value="created">Created ⬆</option>
       <option value="-created">Created ⬇</option>
+      <option value="denoise">Denoise ⬆</option>
+      <option value="-denoise">Denoise ⬇</option>
       <option value="prompt">Prompt ⬆</option>
       <option value="-prompt">Prompt ⬇</option>
       <option value="prompt,seed">Prompt ⬆, Seed ⬆</option>
