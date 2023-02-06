@@ -1,13 +1,15 @@
 import { useFolder } from "../../DataProvider"
-import { useImages } from "../ImagesProvider"
+import { useImages, useSetViewerImage } from "../ImagesProvider"
 
 const FolderSelector = () => {
   const [folder, setFolder] = useFolder()
   const [_, setImages] = useImages()
+  const setViewerImage = useSetViewerImage()
 
   return <select
     onChange={e => {
       setImages([])
+      setViewerImage(false)
       setFolder(e.target.value)
     }}
     value={folder}
