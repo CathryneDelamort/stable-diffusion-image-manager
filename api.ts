@@ -58,13 +58,12 @@ const readFolder = (folder: string) => {
           hiresUpscaler: getDetail('Hires upscaler'),
           prompt: lines[0],
           model: getDetail('Model hash'),
-          negativePrompt: lines[1]?.replace(/^Negative prompt\s/, ''),
+          negativePrompt: lines[1],
           seed: getDetail('Seed'),
           sampler: getDetail('Sampler'),
           steps: parseInt(getDetail('Steps')),
           width,
-          size,
-          details
+          size
         }
         return acc.concat([metaData])
       }
