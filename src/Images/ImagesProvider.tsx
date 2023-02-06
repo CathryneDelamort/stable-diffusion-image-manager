@@ -12,19 +12,20 @@ type DisplaySize = keyof typeof vars.width
 type ImageContextData = {
   images: ImageData[],
   filteredImages: ImageData[]
-  setImages: (images: ImageData[]) => void,
-  loadImages: () => void,
+  setImages: (images: ImageData[]) => void
+  loadImages: () => void
   checkedImages: string[]
-  setCheckedImages: (images: string[]) => void,
-  imagesAreLoading: boolean,
-  moveImages: (imageFiles: string[], to: string) => void,
+  setCheckedImages: (images: string[]) => void
+  imagesAreLoading: boolean
+  moveImages: (imageFiles: string[], to: string) => void
   filters: [keyof ImageData, string][]
   show: string[]
-  setShow: (hide: string[]) => void,
-  displaySize: DisplaySize,
-  setDisplaySize: (displaySize: DisplaySize) => void,
-  viewerIndex: number,
+  setShow: (hide: string[]) => void
+  displaySize: DisplaySize
+  setDisplaySize: (displaySize: DisplaySize) => void
+  viewerIndex: number
   setViewerImage: (image: ImageData | boolean) => void
+  setViewerIndex: (index: number) => void
 }
 
 const ImageContext = createContext<ImageContextData>({
@@ -42,7 +43,8 @@ const ImageContext = createContext<ImageContextData>({
   displaySize: 'sm',
   setDisplaySize: (displaySize: DisplaySize) => {},
   viewerIndex: -1,
-  setViewerImage: (image: ImageData | boolean) => {}
+  setViewerImage: (image: ImageData | boolean) => {},
+  setViewerIndex: (index: number) => {}
 })
 
 export const ImagesProvider = ({ children }: PropsWithChildren) => {
@@ -125,6 +127,9 @@ export const ImagesProvider = ({ children }: PropsWithChildren) => {
         setShow(newShow)
       },
       viewerIndex,
+      setViewerIndex: (index: number) => {
+        setViewerIndex(index)
+      },
       setViewerImage: (image: ImageData | boolean) => {
         if(image) {
           setViewerIndex(filteredImages.map(i => JSON.stringify(i)).indexOf(JSON.stringify(image)))
@@ -173,10 +178,13 @@ export const useShowState = (): [string[], (hide: string[]) => void] => {
   return [ctx.show, ctx.setShow]
 }
 
-export const useViewerIndex = (): [number, (image: ImageData | boolean) => void] => {
+export const useViewerIndex = (): [number, (index: number) => void] => {
   const ctx = useContext(ImageContext)
-  return [ctx.viewerIndex, ctx.setViewerImage]
+  return [ctx.viewerIndex, ctx.setViewerIndex]
 }
+
+export const useSetViewerImage = (): (image: ImageData | boolean) => void =>
+  useContext(ImageContext).setViewerImage
 
 export const useViewerImage = (): ImageData | false => {
   const [viewerIndex] = useViewerIndex()
