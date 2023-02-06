@@ -32,7 +32,8 @@ const SettingsView = () => {
     }
 
     return <>
-        <AppBar title="Settings">
+        <AppBar>
+            <Box style={{fontSize: '1.5rem'}}>Settings</Box>
             {settings.imagePath && 
                 <Link to="/"><button>X</button></Link>
             }

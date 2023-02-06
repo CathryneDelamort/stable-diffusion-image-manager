@@ -1,23 +1,21 @@
+import { MouseEvent } from 'react'
 import Filterable from './Filterable'
 import { Box } from '../layout/Box'
 import { Stack } from '../layout/Stack'
 import type { ImageData } from '../types/ImageData.type'
 import { useFolder } from '../DataProvider'
-import { useCheckedImages, useDisplaySize, useShow } from './ImagesProvider'
-import { vars } from '../styles.css'
+import { useCheckedImages, useDisplaySize, useShow, useViewerIndex } from './ImagesProvider'
 import removeItem from '../removeItem'
 import details from './details'
 
 type Props = ImageData & {
   checked: boolean
-  size: keyof typeof vars.width
 }
 
-const Image = ({ checked, size, ...image  }: Props) => {
-  const {
-    file,
-  } = image
+const Image = ({ checked, ...image  }: Props) => {
+  const { file } = image
   const [checkedImages, setCheckedImages] = useCheckedImages()
+  const [_, setViewerImage] = useViewerIndex()
   const [folder] = useFolder()
   const imgSrc = '/' + ['images', folder, file].filter(f => f).join('/')
   const [displaySize] =  useDisplaySize()
@@ -30,6 +28,13 @@ const Image = ({ checked, size, ...image  }: Props) => {
 
   const detailsToShow = (Object.keys(details) as (keyof typeof details)[]).filter(show)
 
+  const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
+    if(window.innerWidth > 1024) {
+      setViewerImage(image)
+      if(!e.metaKey) e.preventDefault()
+    }
+  }
+
   return <Stack width={displaySize} gap="sm">
     <Box position="relative">
       <Box position="absolute" style={{ top: '1rem', right: '1rem' }}>
@@ -39,7 +44,7 @@ const Image = ({ checked, size, ...image  }: Props) => {
           onChange={e => handleImageChecked(file, e.target.checked)}
           checked={checked} />
       </Box>
-      <a href={imgSrc} target="_blank">
+      <a href={imgSrc} target="_blank" onClick={handleClick}>
         <img src={imgSrc} style={{ maxWidth: '100%', maxHeight: '100%', display: 'block' }} />
       </a>
     </Box>

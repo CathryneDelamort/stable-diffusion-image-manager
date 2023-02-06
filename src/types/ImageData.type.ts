@@ -4,13 +4,13 @@ export type ImageData = {
   denoise: number
   faceRestoration: string
   file: string
-  height: string
+  height: number
   hiresUpscaler: string
   model: string
   seed: string
   prompt: string
+  negativePrompt: string
   sampler: string
   steps: number
-  width: string
-  details: any
+  width: number
 }

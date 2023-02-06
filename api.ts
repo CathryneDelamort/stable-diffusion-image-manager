@@ -47,7 +47,7 @@ const readFolder = (folder: string) => {
           ?.replace(new RegExp(`^${field}: `), '')
           ?.replace(/(\s|\r|\n)+$/, '') || ''
         const size = getDetail('Size')
-        const [width, height] = size?.split('x') || ['', '']
+        const [width, height] = (size?.split('x') || ['', '']).map(parseInt)
         const metaData = {
           cfg: parseFloat(getDetail('CFG scale')),
           created: statSync(join(IMAGE_PATH, file)).ctimeMs,
@@ -94,6 +94,22 @@ app.get('/api/settings', (req: Request, res: Response) => {
   if (!existsSync(SETTINGS_FILE_PATH)) writeSettings(defaultSettings)
   updateImagesSymlink()
   res.send(JSON.stringify(readSettings()))
+})
+
+const getFolders = (parent = ''): string[] => {
+  console.log('reading', join(PUBLIC_IMAGE_DIR, parent))
+  return readdirSync(join(PUBLIC_IMAGE_DIR, parent))
+    .filter(f => statSync(join(PUBLIC_IMAGE_DIR, parent, f)).isDirectory())
+    .map(f => join(parent, f))
+    .reduce((acc, f) => {
+      return acc.concat([f, ...getFolders(f)])
+    }, [] as string[])
+    .sort()
+}
+
+app.get('/api/folders', (req: Request, res: Response) => {
+  updateImagesSymlink()
+  res.send(JSON.stringify(getFolders()))
 })
 
 app.post('/api/settings', (req: Request, res: Response) => {

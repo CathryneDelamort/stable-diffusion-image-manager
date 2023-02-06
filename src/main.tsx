@@ -10,7 +10,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <Router>
       <DataProvider>
-        <div className={themeClass}>
+        <div className={themeClass} style={{ display: 'flex' }}>
           <App />
         </div>
       </DataProvider>

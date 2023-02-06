@@ -9,24 +9,45 @@ import { vars } from '../styles.css'
 
 type DisplaySize = keyof typeof vars.width
 
-const ImageContext = createContext({
-  images: [] as ImageData[],
-  filteredImages: [] as ImageData[],
+type ImageContextData = {
+  images: ImageData[],
+  filteredImages: ImageData[]
+  setImages: (images: ImageData[]) => void,
+  loadImages: () => void,
+  checkedImages: string[]
+  setCheckedImages: (images: string[]) => void,
+  imagesAreLoading: boolean,
+  moveImages: (imageFiles: string[], to: string) => void,
+  filters: [keyof ImageData, string][]
+  show: string[]
+  setShow: (hide: string[]) => void,
+  displaySize: DisplaySize,
+  setDisplaySize: (displaySize: DisplaySize) => void,
+  viewerIndex: number,
+  setViewerImage: (image: ImageData | boolean) => void
+}
+
+const ImageContext = createContext<ImageContextData>({
+  images: [],
+  filteredImages: [],
   setImages: (images: ImageData[]) => {},
   loadImages: () => {},
-  checkedImages: [] as string[],
+  checkedImages: [],
   setCheckedImages: (images: string[]) => {},
   imagesAreLoading: true,
   moveImages: (imageFiles: string[], to: string) => {},
-  filters: [] as [keyof ImageData, string][],
-  show: [] as string[],
+  filters: [],
+  show: [],
   setShow: (hide: string[]) => {},
-  displaySize: 'sm' as DisplaySize,
+  displaySize: 'sm',
   setDisplaySize: (displaySize: DisplaySize) => {},
+  viewerIndex: -1,
+  setViewerImage: (image: ImageData | boolean) => {}
 })
 
 export const ImagesProvider = ({ children }: PropsWithChildren) => {
   const [images, setImages] = useState<ImageData[]>([])
+  const [viewerIndex, setViewerIndex] = useState(-1)
   const [searchParams, setSearchParams] = useSearchParams()
   const [show, setShow] = useState(searchParams.getAll('show'))
   const [imagesAreLoading, setImagesAreLoading] = useState(true)
@@ -102,6 +123,13 @@ export const ImagesProvider = ({ children }: PropsWithChildren) => {
         newShow.forEach(s => searchParams.append('show', s))
         setSearchParams(searchParams)
         setShow(newShow)
+      },
+      viewerIndex,
+      setViewerImage: (image: ImageData | boolean) => {
+        if(image) {
+          setViewerIndex(filteredImages.map(i => JSON.stringify(i)).indexOf(JSON.stringify(image)))
+        }
+        else setViewerIndex(-1)
       }
     }}>
       {children}
@@ -143,4 +171,17 @@ export const useShow = () => {
 export const useShowState = (): [string[], (hide: string[]) => void] => {
   const ctx = useContext(ImageContext)
   return [ctx.show, ctx.setShow]
+}
+
+export const useViewerIndex = (): [number, (image: ImageData | boolean) => void] => {
+  const ctx = useContext(ImageContext)
+  return [ctx.viewerIndex, ctx.setViewerImage]
+}
+
+export const useViewerImage = (): ImageData | false => {
+  const [viewerIndex] = useViewerIndex()
+  const filteredImages = useFilteredImages()
+  return viewerIndex > -1
+    ? filteredImages[viewerIndex]
+    : false
 }

@@ -19,7 +19,7 @@ const App = () => {
       <Route path="/" element={<Images />} />
       <Route path="/settings" element={<SettingsView />} />
     </Routes>
-    </Box>
+  </Box>
 }
 
 export default App

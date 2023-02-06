@@ -1,38 +1,34 @@
-import { PropsWithChildren, ReactComponentElement, useRef } from 'react'
-import { useLocation } from 'react-router-dom'
-import { Box } from './layout/Box'
+import { PropsWithChildren, ReactComponentElement, useEffect, useRef, useState } from 'react'
 import { FlexBox } from "./layout/FlexBox"
 
-type Props = PropsWithChildren & {
-    title: string
-    buttons?: { content: string, to?: string }[]
-}
+const AppBar = ({ children }: PropsWithChildren) => {
+  return <FlexBox>
+    <FlexBox
+      padding="md"
+      justifyContent="space-between"
+      alignItems="center"
+      style={{ visibility: 'hidden' }}
+    >
+      {children}
+    </FlexBox>
+    <FlexBox
+      position="fixed"
+      padding="md"
+      justifyContent="space-between"
+      alignItems="center"
+      elevation="2"
+      style={{
+        top: 0,
+        left: 0,
+        width: '100vw',
+        background: '#222',
+        zIndex: 999
+      }}
+    >
+      {children}
+    </FlexBox>
 
-const AppBar = ({ children, title, buttons }: Props) => {
-    const ref = useRef<HTMLDivElement>(null)
-    const { pathname } = useLocation()
-    return <>
-        <Box style={{ height: ref.current?.offsetHeight + 'px' }} />
-        <FlexBox 
-            position="fixed" 
-            padding="md" 
-            ref={ref} 
-            justifyContent="space-between"
-            alignItems="center"
-            elevation="2"
-            style={{
-                top: 0,
-                left: 0,
-                width: '100vw',
-                background: '#222',
-                zIndex: 999
-            }}
-        >
-            <Box style={{fontSize: '1.5rem'}}>{title}</Box>
-            <Box>{children}</Box>
-        </FlexBox>
-        
-    </>
+  </FlexBox>
 }
 
 export default AppBar
