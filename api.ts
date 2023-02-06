@@ -58,7 +58,7 @@ const readFolder = (folder: string) => {
           hiresUpscaler: getDetail('Hires upscaler'),
           prompt: lines[0],
           model: getDetail('Model hash'),
-          negativePrompt: lines[1],
+          negativePrompt: lines[1]?.match(/^Negative prompt/) && lines[1].replace(/^Negative prompt: /, '') || '', 
           seed: getDetail('Seed'),
           sampler: getDetail('Sampler'),
           steps: parseInt(getDetail('Steps')),
