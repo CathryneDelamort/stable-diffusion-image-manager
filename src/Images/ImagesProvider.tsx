@@ -43,13 +43,28 @@ export const ImagesProvider = ({ children }: PropsWithChildren) => {
   const sort = searchParams.get('sort') || '-created'
   const [displaySize, setDisplaySize] = useState((searchParams.get('displaySize') || 'md') as DisplaySize)
   
+  // TODO: Make these dynamic
+  const folders = ['', 'review', 'queue', 'archive', 'trash']
+
   const loadImages = (markAsLoading = true) => {
     if(markAsLoading) setImagesAreLoading(true)
-    fetch('/api/images?folder=' + folder).then(r => r.json())
-      .then(images => {
-        setImages(images)
-        setImagesAreLoading(false)
-      })
+    if(folder == '_ALL_') {
+      Promise.all(folders.map(f =>
+        fetch('/api/images?folder=' + f).then(r => r.json())
+      ))
+        .then(images => {
+          console.log(images.reduce((acc, imgs) => acc.concat(imgs), []))
+          setImages(images.reduce((acc, imgs) => acc.concat(imgs), []))
+          setImagesAreLoading(false)
+        })
+    }
+    else {
+      fetch('/api/images?folder=' + folder).then(r => r.json())
+        .then(images => {
+          setImages(images)
+          setImagesAreLoading(false)
+        })
+    }
   }
 
   const moveImages = (imageFiles: string[], to: string) => {

@@ -14,6 +14,7 @@ const FolderSelector = () => {
     }}
     value={folder}
   >
+    <option value="_ALL_">All</option>
     <option value="">Generated</option>
     <option value="review">Review</option>
     <option value="queue">Queue</option>

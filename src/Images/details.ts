@@ -9,6 +9,7 @@ const details = {
   hiresUpscaler: { title: 'Hires upscaler', prefix: '🔎' },
   sampler: { title: 'Sampler', prefix: '👀' },
   steps: { title: 'Steps', prefix: '🚶' },
+  folder: { title: 'Folder', prefix: '📁' },
 }
 
 export default details
