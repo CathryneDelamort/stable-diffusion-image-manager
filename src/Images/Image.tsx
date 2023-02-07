@@ -56,12 +56,15 @@ const Image = ({ checked, index, ...image  }: Props) => {
 
   return <Stack width={displaySize} gap="sm" ref={ref}>
     <Box position="relative">
-      <Box position="absolute" style={{ top: '1rem', right: '1rem' }}>
-        <input
-          type="checkbox"
-          style={{ height: '1.5rem', width: '1.5rem' }}
-          onChange={e => handleImageChecked(file, e.target.checked)}
-          checked={checked} />
+      <Box position="absolute" style={{ top: 0, right: 0 }}>
+        <label htmlFor={`checkbox-${file}`} style={{ padding: '1rem', display: 'block' }}>
+          <input
+            id={`checkbox-${file}`}
+            type="checkbox"
+            style={{ height: '1.5rem', width: '1.5rem' }}
+            onChange={e => handleImageChecked(file, e.target.checked)}
+            checked={checked} />
+        </label>
       </Box>
       <a href={imgSrc} target="_blank" onClick={handleClick} rel="noreferrer">
         <img 
