@@ -2,7 +2,6 @@ import Box from '../layout/Box'
 import Stack from '../layout/Stack'
 import { KeyboardEvent, SyntheticEvent, useEffect, useState } from 'react'
 import { useFilteredImages, useSetViewerImage, useViewerImage, useViewerIndex } from './ImagesProvider'
-import { useFolder } from '../DataProvider'
 
 const KeyListener = () => {
   const [viewerIndex, setViewerIndex] = useViewerIndex()
@@ -32,8 +31,7 @@ const Viewer = () => {
   const image = useViewerImage()
   const [maxWidth, setMaxWidth] = useState(Infinity)
   if (!image) return null
-  const [folder] = useFolder()
-  const imgSrc = '/' + ['images', folder, image.file].filter(f => f).join('/')
+  const imgSrc = '/' + ['images', image.folder, image.file].filter(f => f).join('/')
   const handleImageLoad = (e: SyntheticEvent<HTMLImageElement>) => {
     setMaxWidth(e.target.naturalWidth)
   }

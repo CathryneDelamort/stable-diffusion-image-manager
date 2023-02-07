@@ -4,7 +4,6 @@ import type { ImageData } from '../types/ImageData.type'
 import { useSwipeable } from 'react-swipeable'
 import { useState } from 'react'
 import { useFilteredImages, useMoveImages } from './ImagesProvider'
-import { useFolder } from '../DataProvider'
 
 type Props = {
   onClose: () => void
@@ -14,7 +13,6 @@ const SwipeMode = ({ onClose}: Props) => {
   const images = useFilteredImages()
   const [swipeImages, setSwipeImages] = useState<ImageData[]>(images)
   const [index, setIndex] = useState(0)
-  const [folder] = useFolder()
   const moveImages = useMoveImages()
   const handleMove = (to: string) => {
     const file = swipeImages[index].file
@@ -27,7 +25,7 @@ const SwipeMode = ({ onClose}: Props) => {
     onSwipedUp: () => setIndex(index + 1),
     onSwipedDown: () => index > 0 && setIndex(index - 1)
   })
-  const { file } = swipeImages[index]
+  const { file, folder } = swipeImages[index]
   const imgSrc = '/' + ['images', folder, file].filter(f => f).join('/')
 
   return <Stack

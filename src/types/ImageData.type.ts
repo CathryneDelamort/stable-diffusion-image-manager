@@ -4,6 +4,7 @@ export type ImageData = {
   denoise: number
   faceRestoration: string
   file: string
+  folder: string
   height: number
   hiresUpscaler: string
   model: string

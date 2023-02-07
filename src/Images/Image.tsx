@@ -3,7 +3,6 @@ import Filterable from './Filterable'
 import Box from '../layout/Box'
 import Stack from '../layout/Stack'
 import type { ImageData } from '../types/ImageData.type'
-import { useFolder } from '../DataProvider'
 import { useCheckedImages, useDisplaySize, useSetViewerImage, useShow, useViewerIndex } from './ImagesProvider'
 import removeItem from '../removeItem'
 import details from './details'
@@ -25,11 +24,10 @@ function isElementInViewport(el: Element) {
 
 const Image = ({ checked, index, ...image  }: Props) => {
   const ref = useRef<HTMLImageElement>()
-  const { file } = image
+  const { file, folder } = image
   const [checkedImages, setCheckedImages] = useCheckedImages()
   const [viewerIndex] = useViewerIndex()
   const setViewerImage = useSetViewerImage()
-  const [folder] = useFolder()
   const imgSrc = '/' + ['images', folder, file].filter(f => f).join('/')
   const [displaySize] =  useDisplaySize()
   const show = useShow()

@@ -54,6 +54,7 @@ const readFolder = (folder: string) => {
           denoise: parseFloat(getDetail('Denoising strength')),
           faceRestoration: getDetail('Face restoration'),
           file,
+          folder,
           height,
           hiresUpscaler: getDetail('Hires upscaler'),
           prompt: lines[0],
