@@ -25,18 +25,24 @@ const DetailOptions = () => {
       />
     </label>
 
+  const showKeys = (Object.keys(details) as (keyof typeof details)[])
+
   return <FlexBox gap="xl" alignItems="flex-start">
     <Stack gap="md">
-      <strong>Image Details</strong>
+      <FlexBox gap="md" alignItems="center">
+        <strong style={{ flexGrow: 12 }}>Image Details</strong>
+        <button onClick={() => setShow(showKeys)}>
+          All
+        </button>
+        <button onClick={() => setShow([])}>
+          None
+        </button>
+      </FlexBox>
       <FlexBox gap="md" wrap>
-        {(Object.keys(details) as (keyof typeof details)[]).map(key => 
+        {showKeys.map(key => 
           <Item key={key} type={key} title={details[key].title} />
         )}
       </FlexBox>
-    </Stack>
-    <Stack gap="sm" justifyContent="flex-end">
-      <button>All</button>
-      <button>None</button>
     </Stack>
   </FlexBox>
 }
