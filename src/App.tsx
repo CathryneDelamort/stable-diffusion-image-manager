@@ -1,10 +1,9 @@
 import { useLocation, useNavigate} from 'react-router-dom'
 import { useSettings } from './DataProvider'
-import { FlexBox } from './layout/FlexBox'
 import Images from './Images'
 import SettingsView from './SettingsView'
-import { Link, Routes, Route } from 'react-router-dom'
-import { Box } from './layout/Box'
+import { Routes, Route } from 'react-router-dom'
+import Box from './layout/Box'
 
 const App = () => {
   const settings = useSettings()

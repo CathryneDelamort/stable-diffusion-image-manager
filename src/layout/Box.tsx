@@ -1,6 +1,5 @@
-// import { CSSProperties, forwardRef, PropsWithChildren } from 'react'
 import { style as createStyle } from '@vanilla-extract/css'
-import { createElement, ElementType, forwardRef, HTMLAttributes, PropsWithChildren } from 'react'
+import { createElement, ElementType, ForwardedRef, forwardRef, HTMLAttributes, PropsWithChildren } from 'react'
 import { sprinkles, Sprinkles } from '../styles.css'
 
 export type Style = Parameters<typeof createStyle>[0]
@@ -12,14 +11,14 @@ type Props = PropsWithChildren<Sprinkles & AsComponentProp & NativeProps & {
   paper?: boolean
 }>
 
-export const Box = forwardRef<HTMLElement, Props>(({ component = 'div', ...rest }, ref) => {
+const Box = ({ component = 'div', ...rest }: Props, ref: ForwardedRef<HTMLElement>) => {
   const className: Record<string, unknown> = {}
   const nativeProps: Record<string, unknown> = {}
 
   if (rest.paper) {
-    rest.elevation = rest.elevation || "1"
-    rest.background = rest.background || "paper"
-    rest.borderRadius = rest.borderRadius || "sm"
+    rest.elevation = rest.elevation || '1'
+    rest.background = rest.background || 'paper'
+    rest.borderRadius = rest.borderRadius || 'sm'
   }
 
   for (const key in rest) {
@@ -38,4 +37,7 @@ export const Box = forwardRef<HTMLElement, Props>(({ component = 'div', ...rest 
     className: sprinkles(className),
     ...nativeProps
   })
-})
+}
+
+export default forwardRef(Box)
+

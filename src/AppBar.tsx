@@ -1,5 +1,5 @@
-import { PropsWithChildren, ReactComponentElement, useEffect, useRef, useState } from 'react'
-import { FlexBox } from "./layout/FlexBox"
+import { PropsWithChildren } from 'react'
+import FlexBox from './layout/FlexBox'
 
 const AppBar = ({ children }: PropsWithChildren) => {
   return <FlexBox>

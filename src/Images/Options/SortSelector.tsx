@@ -1,5 +1,5 @@
-import { useSearchParams } from "react-router-dom"
-import { FlexBox } from "../../layout/FlexBox"
+import { useSearchParams } from 'react-router-dom'
+import FlexBox from '../../layout/FlexBox'
 
 const SortSelector = () => {
   const [searchParams, setSearchParams] = useSearchParams()

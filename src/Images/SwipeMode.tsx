@@ -1,10 +1,10 @@
-import { Box } from "../layout/Box"
-import { Stack } from "../layout/Stack"
-import type { ImageData } from "../types/ImageData.type"
-import { useSwipeable } from "react-swipeable"
-import { useState } from "react"
-import { useFilteredImages, useMoveImages } from "./ImagesProvider"
-import { useFolder } from "../DataProvider"
+import Box from '../layout/Box'
+import Stack from '../layout/Stack'
+import type { ImageData } from '../types/ImageData.type'
+import { useSwipeable } from 'react-swipeable'
+import { useState } from 'react'
+import { useFilteredImages, useMoveImages } from './ImagesProvider'
+import { useFolder } from '../DataProvider'
 
 type Props = {
   onClose: () => void
@@ -26,8 +26,8 @@ const SwipeMode = ({ onClose}: Props) => {
     onSwipedRight: () => handleMove('review'),
     onSwipedUp: () => setIndex(index + 1),
     onSwipedDown: () => index > 0 && setIndex(index - 1)
-  });
-  const { file, prompt } = swipeImages[index]
+  })
+  const { file } = swipeImages[index]
   const imgSrc = '/' + ['images', folder, file].filter(f => f).join('/')
 
   return <Stack

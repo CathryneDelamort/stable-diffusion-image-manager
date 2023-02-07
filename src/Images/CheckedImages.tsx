@@ -1,5 +1,4 @@
-import { useFolder } from "../DataProvider"
-import { useCheckedImages, useImages, useLoadImages, useMoveImages} from "./ImagesProvider"
+import { useCheckedImages, useMoveImages} from './ImagesProvider'
 
 const CheckedImages = () => {
   const [checkedImages, setCheckedImages] = useCheckedImages()

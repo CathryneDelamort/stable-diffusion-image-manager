@@ -1,9 +1,8 @@
-import { Box } from "../../layout/Box"
-import { FlexBox } from "../../layout/FlexBox"
-import { Stack } from "../../layout/Stack"
-import removeItem from "../../removeItem"
-import details from "../details"
-import { useShowState } from "../ImagesProvider"
+import FlexBox from '../../layout/FlexBox'
+import Stack from '../../layout/Stack'
+import removeItem from '../../removeItem'
+import details from '../details'
+import { useShowState } from '../ImagesProvider'
 
 const DetailOptions = () => {
   const [show, setShow] = useShowState()

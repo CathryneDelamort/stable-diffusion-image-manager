@@ -28,24 +28,8 @@ type ImageContextData = {
   setViewerIndex: (index: number) => void
 }
 
-const ImageContext = createContext<ImageContextData>({
-  images: [],
-  filteredImages: [],
-  setImages: (images: ImageData[]) => {},
-  loadImages: () => {},
-  checkedImages: [],
-  setCheckedImages: (images: string[]) => {},
-  imagesAreLoading: true,
-  moveImages: (imageFiles: string[], to: string) => {},
-  filters: [],
-  show: [],
-  setShow: (hide: string[]) => {},
-  displaySize: 'sm',
-  setDisplaySize: (displaySize: DisplaySize) => {},
-  viewerIndex: -1,
-  setViewerImage: (image: ImageData | boolean) => {},
-  setViewerIndex: (index: number) => {}
-})
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const ImageContext = createContext<ImageContextData>(null as any)
 
 export const ImagesProvider = ({ children }: PropsWithChildren) => {
   const [images, setImages] = useState<ImageData[]>([])

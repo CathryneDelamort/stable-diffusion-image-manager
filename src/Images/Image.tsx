@@ -1,7 +1,7 @@
 import { MouseEvent, useEffect, useRef } from 'react'
 import Filterable from './Filterable'
-import { Box } from '../layout/Box'
-import { Stack } from '../layout/Stack'
+import Box from '../layout/Box'
+import Stack from '../layout/Stack'
 import type { ImageData } from '../types/ImageData.type'
 import { useFolder } from '../DataProvider'
 import { useCheckedImages, useDisplaySize, useSetViewerImage, useShow, useViewerIndex } from './ImagesProvider'
@@ -14,13 +14,13 @@ type Props = ImageData & {
 }
 
 function isElementInViewport(el: Element) {
-  var rect = el.getBoundingClientRect();
+  const rect = el.getBoundingClientRect()
   return (
-      rect.top >= 0 &&
+    rect.top >= 0 &&
       rect.left >= 0 &&
       rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && /* or $(window).height() */
       rect.right <= (window.innerWidth || document.documentElement.clientWidth) /* or $(window).width() */
-  );
+  )
 }
 
 const Image = ({ checked, index, ...image  }: Props) => {
@@ -63,7 +63,7 @@ const Image = ({ checked, index, ...image  }: Props) => {
           onChange={e => handleImageChecked(file, e.target.checked)}
           checked={checked} />
       </Box>
-      <a href={imgSrc} target="_blank" onClick={handleClick}>
+      <a href={imgSrc} target="_blank" onClick={handleClick} rel="noreferrer">
         <img 
           src={imgSrc}
           style={{ 
@@ -77,7 +77,7 @@ const Image = ({ checked, index, ...image  }: Props) => {
     {detailsToShow.length > 0 && 
       <Stack justifyContent="center" gap="xs">
         {detailsToShow.map(key =>
-          <Box title={`Model`} key={key}>
+          <Box title={'Model'} key={key}>
             {details[key].title}: <Filterable type={key}>{image[key]}</Filterable>
           </Box>
         )}

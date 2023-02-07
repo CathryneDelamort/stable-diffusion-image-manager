@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import FilterPill from './FilterPill'
-import { FlexBox } from '../layout/FlexBox'
-import { Stack } from '../layout/Stack'
+import FlexBox from '../layout/FlexBox'
+import Stack from '../layout/Stack'
 import { useEffect, useState } from 'react'
 import { SearchProvider } from './Options/Search'
 import SwipeMode from './SwipeMode'
@@ -13,12 +13,12 @@ import CheckedImages from './CheckedImages'
 import details from './details'
 import Viewer from './Viewer'
 import ImageList from './ImageList'
-import { Box } from '../layout/Box'
+import Box from '../layout/Box'
 
 const ImagesComponent = () => {
   const [swipeMode, setSwipeMode] = useState(false)
   const [showOptions, setShowOptions] = useState(false)
-  const [_, setCheckedImages] = useCheckedImages()
+  const setCheckedImages = useCheckedImages()[1]
   const [loadImages] = useLoadImages()
   const [folder] = useFolder()
   const filters = useFilters()

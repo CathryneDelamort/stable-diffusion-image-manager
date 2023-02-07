@@ -1,8 +1,9 @@
 import { createContext, PropsWithChildren, useContext, useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { FlexBox } from '../../layout/FlexBox'
+import FlexBox from '../../layout/FlexBox'
 
-const SearchContext = createContext({ search: '', setSearch: (search: string) => {}})
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const SearchContext = createContext(null as any)
 
 export const SearchProvider = ({ children }: PropsWithChildren) => {
   const [searchParams] = useSearchParams()

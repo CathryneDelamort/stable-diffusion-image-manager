@@ -1,9 +1,9 @@
-import { useFolder } from "../../DataProvider"
-import { useImages, useSetViewerImage } from "../ImagesProvider"
+import { useFolder } from '../../DataProvider'
+import { useImages, useSetViewerImage } from '../ImagesProvider'
 
 const FolderSelector = () => {
   const [folder, setFolder] = useFolder()
-  const [_, setImages] = useImages()
+  const setImages = useImages()[1]
   const setViewerImage = useSetViewerImage()
 
   return <select

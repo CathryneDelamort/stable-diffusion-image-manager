@@ -1,5 +1,5 @@
 import { useSearchParams } from 'react-router-dom'
-import { Box } from '../layout/Box'
+import Box from '../layout/Box'
 import details from './details'
 
 type Props = {

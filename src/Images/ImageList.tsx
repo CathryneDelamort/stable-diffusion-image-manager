@@ -1,12 +1,12 @@
 import Image from './Image'
-import { Box } from '../layout/Box'
-import { FlexBox } from '../layout/FlexBox'
+import Box from '../layout/Box'
+import FlexBox from '../layout/FlexBox'
 import { useCheckedImages, useFilteredImages, useLoadImages } from './ImagesProvider'
 import BackToTop from './BackToTop'
 
 const ImageList = () => {
   const [checkedImages,] = useCheckedImages()
-  const [_, imagesAreLoading] = useLoadImages()
+  const imagesAreLoading = useLoadImages()[1]
   const filteredImages = useFilteredImages()
 
   return (
@@ -26,7 +26,7 @@ const ImageList = () => {
                 key={image.file}
                 checked={checkedImages.indexOf(image.file) > -1}
                 index={i}
-               />
+              />
             )}
           </FlexBox>
         </FlexBox>

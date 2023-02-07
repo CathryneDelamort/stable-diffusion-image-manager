@@ -1,8 +1,8 @@
-import { Box } from "../layout/Box"
-import { Stack } from "../layout/Stack"
-import { KeyboardEvent, SyntheticEvent, useEffect, useState } from "react"
-import { useFilteredImages, useSetViewerImage, useViewerImage, useViewerIndex } from "./ImagesProvider"
-import { useFolder } from "../DataProvider"
+import Box from '../layout/Box'
+import Stack from '../layout/Stack'
+import { KeyboardEvent, SyntheticEvent, useEffect, useState } from 'react'
+import { useFilteredImages, useSetViewerImage, useViewerImage, useViewerIndex } from './ImagesProvider'
+import { useFolder } from '../DataProvider'
 
 const KeyListener = () => {
   const [viewerIndex, setViewerIndex] = useViewerIndex()
@@ -10,10 +10,10 @@ const KeyListener = () => {
   const filteredImages = useFilteredImages()
   useEffect(() => {
     const handleKeyUp = (e: KeyboardEvent<Element>) => {
-      if(e.key == "ArrowLeft" && viewerIndex > 0) {
+      if(e.key == 'ArrowLeft' && viewerIndex > 0) {
         setViewerIndex(viewerIndex - 1)
       }
-      if(e.key == "ArrowRight" && viewerIndex < filteredImages.length - 1) {
+      if(e.key == 'ArrowRight' && viewerIndex < filteredImages.length - 1) {
         setViewerIndex(viewerIndex + 1)
       }
       if(e.key == 'Escape') setViewerImage(false)
@@ -32,7 +32,6 @@ const Viewer = () => {
   const image = useViewerImage()
   const [maxWidth, setMaxWidth] = useState(Infinity)
   if (!image) return null
-  const [viewerIndex, setViewerIndex] = useViewerIndex()
   const [folder] = useFolder()
   const imgSrc = '/' + ['images', folder, image.file].filter(f => f).join('/')
   const handleImageLoad = (e: SyntheticEvent<HTMLImageElement>) => {

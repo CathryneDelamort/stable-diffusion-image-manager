@@ -1,6 +1,5 @@
-import { useSearchParams } from "react-router-dom"
-import { FlexBox } from "../../layout/FlexBox"
-import { useDisplaySize } from "../ImagesProvider"
+import FlexBox from '../../layout/FlexBox'
+import { useDisplaySize } from '../ImagesProvider'
 import { vars } from '../../styles.css'
 
 const SizeSelector = () => {

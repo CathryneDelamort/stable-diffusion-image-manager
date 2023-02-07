@@ -2,17 +2,13 @@ import { createContext, PropsWithChildren, useContext, useEffect, useState } fro
 import { useSearchParams } from 'react-router-dom'
 import defaultSettings from './settings.default.json'
 
-const DataContext = createContext({
-  settings: {...defaultSettings, loaded: false},
-  folder: '',
-  setFolder: (folder: string) => {}
-})
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const DataContext = createContext(null as any)
 
 export const DataProvider = ({ children }: PropsWithChildren) => {
   const [settings, setSettings] = useState(defaultSettings)
   const [settingsLoaded, setSettingsLoaded] = useState(false)
   const [searchParams, setSearchParams] = useSearchParams()
-  const [checkedImages, setCheckedImages] = useState<string[]>([])
   const folder = searchParams.get('folder') || ''
 
   useEffect(() => {
