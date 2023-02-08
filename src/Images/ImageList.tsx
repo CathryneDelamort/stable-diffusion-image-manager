@@ -1,5 +1,4 @@
 import Image from './Image'
-import Box from '../layout/Box'
 import FlexBox from '../layout/FlexBox'
 import { useFilteredImages, useLoadImages } from './ImagesProvider'
 import BackToTop from './BackToTop'
@@ -14,12 +13,12 @@ const ImageList = () => {
         ? <>Loading images ...</>
         : <FlexBox justifyContent="center">
           {filteredImages.length == 0 &&
-            <Box>
-              No images found matching your search criteria.
-            </Box>
+            <FlexBox padding="xl" placeItems="center" style={{ textAlign: 'center' }}>
+              No images found matching your search criteria. 😔
+            </FlexBox>
           }
           <FlexBox gap="sm" wrap justifyContent="center" alignItems="flex-start">
-            {filteredImages.slice(0, 100).map((image, i) =>
+            {filteredImages.slice(0, 100).map((image: ImageData, i: number) =>
               <Image {...image} key={JSON.stringify(image)} index={i} />
             )}
           </FlexBox>
