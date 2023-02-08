@@ -14,6 +14,7 @@ import details from './details'
 import Viewer from './Viewer'
 import ImageList from './ImageList'
 import FolderSelector from './Options/FolderSelector'
+import Box from '../layout/Box'
 
 const ImagesComponent = () => {
   const [swipeMode, setSwipeMode] = useState(false)
@@ -36,18 +37,23 @@ const ImagesComponent = () => {
       {!swipeMode &&
         <Stack gap="md">
           <AppBar>
-            <Stack gap="sm" width="full">
-              <FlexBox alignItems="center" wrap gap="md" justifyContent="space-between">
+            <Stack gap="md" width="full">
+              <FlexBox 
+                alignItems="center"
+                wrap gap="md"
+                justifyContent={{ sm: 'flex-start', md: 'space-between' }}
+                flexDirection={{ sm: 'column', md: 'row' }}
+              >
                 <FolderSelector />
-                <Stack>
-                  <Stack flexDirection="row" gap="sm">
-                    <CheckedImages />
-                    <button title="Reload images" onClick={() => loadImages()}>🔃</button>
+                <FlexBox gap="sm" justifyContent="flex-end">
+                  <CheckedImages />
+                  <button title="Reload images" onClick={() => loadImages()}>🔃</button>
+                  <Box display={{ md: 'none' }}>
                     <button title="Swipe mode" onClick={() => setSwipeMode(true)}>👆</button>
-                    <button title="Options" onClick={() => setShowOptions(!showOptions)}>👁</button>
-                    <Link title="Settings" to="settings"><button>⚙️</button></Link>
-                  </Stack>
-                </Stack>
+                  </Box>
+                  <button title="Options" onClick={() => setShowOptions(!showOptions)}>👁</button>
+                  <Link title="Settings" to="settings"><button>⚙️</button></Link>
+                </FlexBox>
               </FlexBox>
               {showOptions && <Options />}
             </Stack>
