@@ -10,13 +10,11 @@ const Options = () => {
   return (
     <Box display="grid">
       <Stack style={{ justifySelf: 'center' }} paddingX="md" gap="md" >
-        <Stack padding="lg" gap="md" paper>
-          <FlexBox placeItems="center" gap="lg" wrap>
-            <Search />
-            <SortSelector />
-            <SizeSelector />
-          </FlexBox>
-        </Stack>
+        <FlexBox padding="lg" placeItems="center" paper gap="lg" wrap display={{ sm: 'flex', lg: 'none'}}>
+          <Search />
+          <SortSelector />
+          <SizeSelector />
+        </FlexBox>
         <Stack padding="lg" gap="md" paper>
           <DetailOptions />
         </Stack>

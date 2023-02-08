@@ -3,7 +3,7 @@ import FilterPill from './FilterPill'
 import FlexBox from '../layout/FlexBox'
 import Stack from '../layout/Stack'
 import { useEffect, useState } from 'react'
-import { SearchProvider } from './Options/Search'
+import Search, { SearchProvider } from './Options/Search'
 import SwipeMode from './SwipeMode'
 import { ImagesProvider, useCheckedImages, useFilters, useLoadImages } from './ImagesProvider'
 import { useFolder } from '../DataProvider'
@@ -15,6 +15,8 @@ import Viewer from './Viewer'
 import ImageList from './ImageList'
 import FolderSelector from './Options/FolderSelector'
 import Box from '../layout/Box'
+import SortSelector from './Options/SortSelector'
+import SizeSelector from './Options/SizeSelector'
 
 const ImagesComponent = () => {
   const [swipeMode, setSwipeMode] = useState(false)
@@ -44,7 +46,14 @@ const ImagesComponent = () => {
                 justifyContent={{ sm: 'flex-start', md: 'space-between' }}
                 flexDirection={{ sm: 'column', md: 'row' }}
               >
-                <FolderSelector />
+                <FlexBox alignItems="center" gap="lg">
+                  <FolderSelector />
+                  <FlexBox alignItems="center" gap="lg" display={{ sm: 'none', lg: 'flex'}}>
+                    <Search />
+                    <SortSelector />
+                    <SizeSelector />
+                  </FlexBox>
+                </FlexBox>
                 <FlexBox gap="sm" justifyContent="flex-end">
                   <CheckedImages />
                   <button title="Reload images" onClick={() => loadImages()}>🔃</button>
