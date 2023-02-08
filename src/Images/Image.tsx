@@ -22,7 +22,7 @@ function isElementInViewport(el: Element) {
   )
 }
 
-const Image = ({ checked, index, ...image  }: Props) => {
+const Image = ({ index, ...image  }: Props) => {
   const ref = useRef<HTMLImageElement>()
   const { file, folder } = image
   const [checkedImages, setCheckedImages] = useCheckedImages()
@@ -32,9 +32,9 @@ const Image = ({ checked, index, ...image  }: Props) => {
   const [displaySize] =  useDisplaySize()
   const show = useShow()
 
-  const handleImageChecked = (file: string, checked: boolean) => {
-    if(checked) setCheckedImages(checkedImages.concat([file]))
-    else setCheckedImages(removeItem(checkedImages, file))
+  const handleImageChecked = (checked: boolean) => {
+    if(checked) setCheckedImages(checkedImages.concat([image]))
+    else setCheckedImages(removeItem(checkedImages, image))
   }
 
   const detailsToShow = (Object.keys(details) as (keyof typeof details)[]).filter(show)
@@ -60,8 +60,9 @@ const Image = ({ checked, index, ...image  }: Props) => {
             id={`checkbox-${file}`}
             type="checkbox"
             style={{ height: '1.5rem', width: '1.5rem' }}
-            onChange={e => handleImageChecked(file, e.target.checked)}
-            checked={checked} />
+            onChange={e => handleImageChecked(e.target.checked)}
+            checked={Boolean(checkedImages.find(i => JSON.stringify(i) == JSON.stringify(image)))}
+          />
         </label>
       </Box>
       <a href={imgSrc} target="_blank" onClick={handleClick} rel="noreferrer">

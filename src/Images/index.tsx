@@ -13,7 +13,7 @@ import CheckedImages from './CheckedImages'
 import details from './details'
 import Viewer from './Viewer'
 import ImageList from './ImageList'
-import Box from '../layout/Box'
+import FolderSelector from './Options/FolderSelector'
 
 const ImagesComponent = () => {
   const [swipeMode, setSwipeMode] = useState(false)
@@ -33,12 +33,12 @@ const ImagesComponent = () => {
       {swipeMode &&
         <SwipeMode onClose={() => { loadImages(); setSwipeMode(false) }} />
       }
-      {!swipeMode && 
+      {!swipeMode &&
         <Stack gap="md">
           <AppBar>
             <Stack gap="sm" width="full">
-              <FlexBox alignItems="center" justifyContent="space-between">
-                <Box style={{fontSize: '1.5rem'}}>Images</Box>
+              <FlexBox alignItems="center" wrap gap="md" justifyContent="space-between">
+                <FolderSelector />
                 <Stack>
                   <Stack flexDirection="row" gap="sm">
                     <CheckedImages />
@@ -52,13 +52,13 @@ const ImagesComponent = () => {
               {showOptions && <Options />}
             </Stack>
           </AppBar>
-          {filters.length > 0 && 
+          {filters.length > 0 &&
             <FlexBox gap="md" placeItems="center">
               {filters.map(([key, value]) =>
-                <FilterPill 
+                <FilterPill
                   key={`${key}+${value}`}
                   type={key.replace(/^filter-/, '') as keyof typeof details}
-                  value={value} 
+                  value={value}
                 />
               )}
             </FlexBox>
@@ -73,7 +73,7 @@ const ImagesComponent = () => {
   )
 }
 
-const Images = () => 
+const Images = () =>
   <SearchProvider>
     <ImagesProvider>
       <ImagesComponent />

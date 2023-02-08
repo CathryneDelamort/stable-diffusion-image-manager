@@ -115,7 +115,6 @@ app.get('/api/folders', (req: Request, res: Response) => {
 
 app.post('/api/settings', (req: Request, res: Response) => {
   const { imagePath } = req.body
-  const errors = []
   if (existsSync(req.body.imagePath)) {
     writeSettings({ ...SettingsView, imagePath })
     updateImagesSymlink()
@@ -128,15 +127,15 @@ app.post('/api/settings', (req: Request, res: Response) => {
 })
 
 app.get('/api/images', (req: Request, res: Response) => {
-  const images = readFolder(req.query.folder + '');
+  const images = readFolder(req.query.folder + '')
   res.send(JSON.stringify(images))
 })
 
-app.post('/api/move', ({ body: { from, to, images } }: Request, res: Response) => {
-  const fromDir = join(PUBLIC_IMAGE_DIR, from)
+app.post('/api/move', ({ body: { to, images } }: Request, res: Response) => {
   const toDir = join(PUBLIC_IMAGE_DIR, to)
   mkdirSync(toDir, { recursive: true })
-  images.forEach((file: string) => {
+  images.forEach(({file, folder}: ImageData) => {
+    const fromDir = join(PUBLIC_IMAGE_DIR, folder)
     try {
       renameSync(join(fromDir, file), join(toDir, file))
       const txtFile = file.replace(/\.png/, '.txt')

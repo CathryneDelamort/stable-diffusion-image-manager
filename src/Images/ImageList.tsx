@@ -1,11 +1,10 @@
 import Image from './Image'
 import Box from '../layout/Box'
 import FlexBox from '../layout/FlexBox'
-import { useCheckedImages, useFilteredImages, useLoadImages } from './ImagesProvider'
+import { useFilteredImages, useLoadImages } from './ImagesProvider'
 import BackToTop from './BackToTop'
 
 const ImageList = () => {
-  const [checkedImages,] = useCheckedImages()
   const imagesAreLoading = useLoadImages()[1]
   const filteredImages = useFilteredImages()
 
@@ -21,12 +20,7 @@ const ImageList = () => {
           }
           <FlexBox gap="sm" wrap justifyContent="center" alignItems="flex-start">
             {filteredImages.slice(0, 100).map((image, i) =>
-              <Image 
-                {...image}
-                key={image.file}
-                checked={checkedImages.indexOf(image.file) > -1}
-                index={i}
-              />
+              <Image {...image} key={JSON.stringify(image)} index={i} />
             )}
           </FlexBox>
         </FlexBox>

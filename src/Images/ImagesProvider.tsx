@@ -9,27 +9,8 @@ import { vars } from '../styles.css'
 
 type DisplaySize = keyof typeof vars.width
 
-type ImageContextData = {
-  images: ImageData[],
-  filteredImages: ImageData[]
-  setImages: (images: ImageData[]) => void
-  loadImages: () => void
-  checkedImages: string[]
-  setCheckedImages: (images: string[]) => void
-  imagesAreLoading: boolean
-  moveImages: (imageFiles: string[], to: string) => void
-  filters: [keyof ImageData, string][]
-  show: string[]
-  setShow: (hide: string[]) => void
-  displaySize: DisplaySize
-  setDisplaySize: (displaySize: DisplaySize) => void
-  viewerIndex: number
-  setViewerImage: (image: ImageData | boolean) => void
-  setViewerIndex: (index: number) => void
-}
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const ImageContext = createContext<ImageContextData>(null as any)
+const ImageContext = createContext(null as any)
 
 export const ImagesProvider = ({ children }: PropsWithChildren) => {
   const [images, setImages] = useState<ImageData[]>([])
@@ -39,12 +20,12 @@ export const ImagesProvider = ({ children }: PropsWithChildren) => {
   const [imagesAreLoading, setImagesAreLoading] = useState(true)
   const [folder] = useFolder()
   const [search] = useSearch()
-  const [checkedImages, setCheckedImages] = useState<string[]>([])
+  const [checkedImages, setCheckedImages] = useState<ImageData[]>([])
   const sort = searchParams.get('sort') || '-created'
   const [displaySize, setDisplaySize] = useState((searchParams.get('displaySize') || 'md') as DisplaySize)
   
   // TODO: Make these dynamic
-  const folders = ['', 'review', 'queue', 'archive', 'trash']
+  const folders = ['', 'review', 'queue', 'archive']
 
   const loadImages = (markAsLoading = true) => {
     if(markAsLoading) setImagesAreLoading(true)
@@ -53,7 +34,6 @@ export const ImagesProvider = ({ children }: PropsWithChildren) => {
         fetch('/api/images?folder=' + f).then(r => r.json())
       ))
         .then(images => {
-          console.log(images.reduce((acc, imgs) => acc.concat(imgs), []))
           setImages(images.reduce((acc, imgs) => acc.concat(imgs), []))
           setImagesAreLoading(false)
         })
@@ -67,12 +47,16 @@ export const ImagesProvider = ({ children }: PropsWithChildren) => {
     }
   }
 
-  const moveImages = (imageFiles: string[], to: string) => {
-    setImages(images.filter(({ file }) => imageFiles.indexOf(file) == -1))
+  const moveImages = (imagesToMove: ImageData[], to: string) => {
+    if(folder != '_ALL_') {
+      setImages(images.filter(
+        image => !imagesToMove.find(i => JSON.stringify(i) == JSON.stringify(image))
+      ))
+    }
     fetch('/api/move', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json'},
-      body: JSON.stringify({ from: folder, to, images: imageFiles })
+      body: JSON.stringify({ to, images: imagesToMove })
     })
       .then(() => loadImages(false))
   }
@@ -150,7 +134,7 @@ export const useFilteredImages = () => useContext(ImageContext).filteredImages
 
 export const useFilters = () => useContext(ImageContext).filters
 
-export const useCheckedImages = (): [string[], (images: string[]) => void] => {
+export const useCheckedImages = (): [ImageData[], (images: ImageData[]) => void] => {
   const ctx = useContext(ImageContext)
   return [ctx.checkedImages, ctx.setCheckedImages]
 }
