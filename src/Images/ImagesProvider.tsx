@@ -58,7 +58,6 @@ export const ImagesProvider = ({ children }: PropsWithChildren) => {
       headers: { 'Content-Type': 'application/json'},
       body: JSON.stringify({ to, images: imagesToMove })
     })
-      .then(() => loadImages(false))
   }
 
   const filters = Array.from(searchParams)
