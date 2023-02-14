@@ -80,7 +80,7 @@ export const ImagesProvider = ({ children }: PropsWithChildren) => {
       Math.min(...searchTests) > .4
     ) &&
     filters.reduce(
-      (passing, [key, value]) => passing && image[key] === value,
+      (passing, [key, value]) => passing && image[key] == value,
       true
     )
   }).sort(sortBy(sort))
