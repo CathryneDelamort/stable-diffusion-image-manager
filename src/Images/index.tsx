@@ -5,7 +5,7 @@ import Stack from '../layout/Stack'
 import { useEffect, useState } from 'react'
 import Search, { SearchProvider } from './Options/Search'
 import SwipeMode from './SwipeMode'
-import { ImagesProvider, useCheckedImages, useFilters, useLoadImages } from './ImagesProvider'
+import { ImagesProvider, useCheckedImages, useFilteredImages, useFilters, useImages, useLoadImages } from './ImagesProvider'
 import { useFolder } from '../DataProvider'
 import AppBar from '../AppBar'
 import Options from './Options'
@@ -25,6 +25,8 @@ const ImagesComponent = () => {
   const [loadImages] = useLoadImages()
   const [folder] = useFolder()
   const filters = useFilters()
+  const filteredImages = useFilteredImages()
+  const [images] = useImages()
 
   useEffect(() => {
     setCheckedImages([])
@@ -60,7 +62,12 @@ const ImagesComponent = () => {
                   <Box display={{ md: 'none' }}>
                     <button title="Swipe mode" onClick={() => setSwipeMode(true)}>👆</button>
                   </Box>
-                  <button title="Options" onClick={() => setShowOptions(!showOptions)}>👁</button>
+                  <button title="Options" onClick={() => setShowOptions(!showOptions)}>
+                    👁 {images.length == filteredImages.length
+                      ? images.length
+                      : `${filteredImages.length} of ${images.length}`
+                    }
+                  </button>
                   <Link title="Settings" to="settings"><button>⚙️</button></Link>
                 </FlexBox>
               </FlexBox>
