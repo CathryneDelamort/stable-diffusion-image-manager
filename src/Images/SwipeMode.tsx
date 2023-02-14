@@ -2,7 +2,7 @@ import Box from '../layout/Box'
 import Stack from '../layout/Stack'
 import type { ImageData } from '../types/ImageData.type'
 import { useSwipeable } from 'react-swipeable'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useFilteredImages, useMoveImages } from './ImagesProvider'
 
 type Props = {
@@ -17,14 +17,16 @@ const SwipeMode = ({ onClose }: Props) => {
   const handleMove = (to: string) => {
     const image = swipeImages[index]
     moveImages([image], to)
-    setSwipeImages(swipeImages.filter(i => JSON.stringify(i) !== JSON.stringify(image)))
+    const newSwipeImages = swipeImages.filter(i => JSON.stringify(i) !== JSON.stringify(image))
+    if(newSwipeImages.length == 0) onClose()
+    else setSwipeImages(newSwipeImages)
   }
   const { file, folder, prompt } = swipeImages[index]
   const rightWord = folder == 'review' ? 'Que' : 'Review'
   const handlers = useSwipeable({
     onSwipedLeft: () => handleMove('trash'),
     onSwipedRight: () => handleMove(rightWord.toLowerCase()),
-    onSwipedUp: () => setIndex(index + 1),
+    onSwipedUp: () => index < swipeImages.length - 1 && setIndex(index + 1),
     onSwipedDown: () => index > 0 && setIndex(index - 1)
   })
   const imgSrc = '/' + ['images', folder, file].filter(f => f).join('/')
