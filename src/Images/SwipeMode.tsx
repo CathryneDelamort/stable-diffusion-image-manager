@@ -22,7 +22,7 @@ const SwipeMode = ({ onClose }: Props) => {
     else setSwipeImages(newSwipeImages)
   }
   const { file, folder, prompt } = swipeImages[index]
-  const rightWord = folder == 'review' ? 'Que' : 'Review'
+  const rightWord = folder == 'review' ? 'Queue' : 'Review'
   const handlers = useSwipeable({
     onSwipedLeft: () => handleMove('trash'),
     onSwipedRight: () => handleMove(rightWord.toLowerCase()),
