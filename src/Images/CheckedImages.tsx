@@ -14,7 +14,7 @@ const CheckedImages = () => {
       <select onChange={e => handleCheckedImagesAction(e.target.value)}>
         <option>{checkedImages.length} checked ...</option>
         <option value="uncheck">Uncheck all</option>
-        <option value="images">Move to root</option>
+        <option value="">Move to root</option>
         <option value="review">Move to Review</option>
         <option value="queue">Move to Queue</option>
         <option value="archive">Move to Archive</option>
