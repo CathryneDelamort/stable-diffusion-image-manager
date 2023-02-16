@@ -27,7 +27,7 @@ const readSettings = () => {
 const writeSettings = (settings: any) => writeFileSync(SETTINGS_FILE_PATH, JSON.stringify(settings, null, 2))
 
 const app = express()
-app.use(bodyParser.json())
+app.use(bodyParser.json({ limit: '1mb' }))
 
 const readFolder = (folder: string) => {
   const IMAGE_PATH = join(PUBLIC_IMAGE_DIR, folder)
