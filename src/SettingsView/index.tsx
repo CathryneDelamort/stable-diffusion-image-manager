@@ -3,14 +3,13 @@ import { useSettings } from '../DataProvider'
 import Box from '../layout/Box'
 import Stack from '../layout/Stack'
 import FlexBox from '../layout/FlexBox'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import AppBar from '../AppBar'
 
 const SettingsView = () => {
   const settings = useSettings()
   const [imagePath, setImagePathValue] = useState('')
   const [error, setError] = useState('')
-  const navigate = useNavigate()
 
   useEffect(() => {
     setImagePathValue(settings.imagePath)
@@ -23,7 +22,7 @@ const SettingsView = () => {
       body: JSON.stringify({ imagePath })
     })
       .then(r => {
-        if(r.ok) navigate('/')
+        if(r.ok) document.location = '/'
         else r.text().then(setError)
       })
       .catch(() => {
