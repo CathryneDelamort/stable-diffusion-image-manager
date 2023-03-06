@@ -32,8 +32,8 @@ app.use(bodyParser.json({ limit: '1mb' }))
 const readFolder = (folder: string) => {
   try {
     const IMAGE_PATH = join(PUBLIC_IMAGE_DIR, folder)
-    mkdirSync(IMAGE_PATH, { recursive: true })
     updateImagesSymlink()
+    mkdirSync(IMAGE_PATH, { recursive: true })
     return readdirSync(IMAGE_PATH).reduce((acc, file) => {
       if (file.match(/\.png$/)) {
         const txtPath = join(IMAGE_PATH, file).replace(/\.png/, '.txt') + ''
