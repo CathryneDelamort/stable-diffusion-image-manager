@@ -30,71 +30,90 @@ const app = express()
 app.use(bodyParser.json({ limit: '1mb' }))
 
 const readFolder = (folder: string) => {
-  const IMAGE_PATH = join(PUBLIC_IMAGE_DIR, folder)
-  updateImagesSymlink()
-  return readdirSync(IMAGE_PATH).reduce((acc, file) => {
-    if (file.match(/\.png$/)) {
-      const txtPath = join(IMAGE_PATH, file).replace(/\.png/, '.txt') + ''
-      const lines = existsSync(txtPath)
-        ? readFileSync(txtPath, { encoding: 'utf8', flag: 'r' }).split('\n')
-        : []
-      try {
-        const details = lines.reduce(
-          (acc, line) => acc.concat(line.split(', ')),
-          [] as string[]
-        )
-        const getDetail = (field: string) => (details.find((s: string) => s.match(`^${field}: `)) || '')
-          ?.replace(new RegExp(`^${field}: `), '')
-          ?.replace(/(\s|\r|\n)+$/, '') || ''
-        const size = getDetail('Size')
-        const [width, height] = (size?.split('x') || ['', '']).map(parseInt)
-        const metaData = {
-          cfg: parseFloat(getDetail('CFG scale')),
-          created: statSync(join(IMAGE_PATH, file)).ctimeMs,
-          denoise: parseFloat(getDetail('Denoising strength')),
-          faceRestoration: getDetail('Face restoration'),
-          file,
-          folder,
-          height,
-          hiresUpscaler: getDetail('Hires upscaler'),
-          prompt: lines[0],
-          model: getDetail('Model hash'),
-          negativePrompt: lines[1]?.match(/^Negative prompt/) && lines[1].replace(/^Negative prompt: /, '') || '', 
-          seed: getDetail('Seed'),
-          sampler: getDetail('Sampler'),
-          steps: parseInt(getDetail('Steps')),
-          width,
-          size
+  try {
+    const IMAGE_PATH = join(PUBLIC_IMAGE_DIR, folder)
+    mkdirSync(IMAGE_PATH, { recursive: true })
+    updateImagesSymlink()
+    return readdirSync(IMAGE_PATH).reduce((acc, file) => {
+      if (file.match(/\.png$/)) {
+        const txtPath = join(IMAGE_PATH, file).replace(/\.png/, '.txt') + ''
+        const lines = existsSync(txtPath)
+          ? readFileSync(txtPath, { encoding: 'utf8', flag: 'r' }).split('\n')
+          : []
+        try {
+          const details = lines.reduce(
+            (acc, line) => acc.concat(line.split(', ')),
+            [] as string[]
+          )
+          const getDetail = (field: string) => (details.find((s: string) => s.match(`^${field}: `)) || '')
+            ?.replace(new RegExp(`^${field}: `), '')
+            ?.replace(/(\s|\r|\n)+$/, '') || ''
+          const size = getDetail('Size')
+          const [width, height] = (size?.split('x') || ['', '']).map(parseInt)
+          const metaData = {
+            cfg: parseFloat(getDetail('CFG scale')),
+            created: statSync(join(IMAGE_PATH, file)).ctimeMs,
+            denoise: parseFloat(getDetail('Denoising strength')),
+            faceRestoration: getDetail('Face restoration'),
+            file,
+            folder,
+            height,
+            hiresUpscaler: getDetail('Hires upscaler'),
+            prompt: lines[0],
+            model: getDetail('Model hash'),
+            negativePrompt: lines[1]?.match(/^Negative prompt/) && lines[1].replace(/^Negative prompt: /, '') || '', 
+            seed: getDetail('Seed'),
+            sampler: getDetail('Sampler'),
+            steps: parseInt(getDetail('Steps')),
+            width,
+            size
+          }
+          return acc.concat([metaData])
         }
-        return acc.concat([metaData])
+        catch (e) {
+          console.log('Error reading', txtPath)
+          console.log(lines)
+          console.log(e)
+        }
       }
-      catch (e) {
-        console.log('Error reading', txtPath)
-        console.log(lines)
-        console.log(e)
-      }
-    }
-    return acc
-  }, [] as ImageData[])
+      return acc
+    }, [] as ImageData[])
+  }
+  catch(e) {
+    console.log(e)
+    throw e
+  }
 }
 
 const updateImagesSymlink = () => {
-  const { imagePath } = readSettings()
-  if (imagePath) {
-    if (!existsSync(PUBLIC_IMAGE_DIR)) {
-      symlinkSync(imagePath, PUBLIC_IMAGE_DIR, 'dir')
+  try {
+    const { imagePath } = readSettings()
+    if (imagePath) {
+      if (!existsSync(PUBLIC_IMAGE_DIR)) {
+        symlinkSync(imagePath, PUBLIC_IMAGE_DIR, 'dir')
+      }
+      else if (lstatSync(PUBLIC_IMAGE_DIR).isSymbolicLink()) {
+        unlinkSync(PUBLIC_IMAGE_DIR)
+        symlinkSync(imagePath, PUBLIC_IMAGE_DIR, 'dir')
+      }
     }
-    else if (lstatSync(PUBLIC_IMAGE_DIR).isSymbolicLink()) {
-      unlinkSync(PUBLIC_IMAGE_DIR)
-      symlinkSync(imagePath, PUBLIC_IMAGE_DIR, 'dir')
-    }
+  }
+  catch(e) {
+    console.log(e)
+    throw e
   }
 }
 
 app.get('/api/settings', (req: Request, res: Response) => {
-  if (!existsSync(SETTINGS_FILE_PATH)) writeSettings(defaultSettings)
-  updateImagesSymlink()
-  res.send(JSON.stringify(readSettings()))
+  try {
+    if (!existsSync(SETTINGS_FILE_PATH)) writeSettings(defaultSettings)
+    updateImagesSymlink()
+    res.send(JSON.stringify(readSettings()))
+  }
+  catch(e) {
+    console.log(e)
+    throw e
+  }
 })
 
 const getFolders = (parent = ''): string[] => {
@@ -109,8 +128,14 @@ const getFolders = (parent = ''): string[] => {
 }
 
 app.get('/api/folders', (req: Request, res: Response) => {
-  updateImagesSymlink()
-  res.send(JSON.stringify(getFolders()))
+  try {
+    updateImagesSymlink()
+    res.send(JSON.stringify(getFolders()))
+  }
+  catch(e) {
+    console.log(e)
+    throw e
+  }
 })
 
 app.post('/api/settings', (req: Request, res: Response) => {
@@ -127,8 +152,14 @@ app.post('/api/settings', (req: Request, res: Response) => {
 })
 
 app.get('/api/images', (req: Request, res: Response) => {
-  const images = readFolder(req.query.folder + '')
-  res.send(JSON.stringify(images))
+  try {
+    const images = readFolder(req.query.folder + '')
+    res.send(JSON.stringify(images))
+  }
+  catch(e) {
+    console.log(e)
+    throw e
+  }
 })
 
 app.post('/api/move', ({ body: { to, images } }: Request, res: Response) => {
