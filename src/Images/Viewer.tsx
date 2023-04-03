@@ -1,12 +1,14 @@
 import Box from '../layout/Box'
 import Stack from '../layout/Stack'
 import { KeyboardEvent, SyntheticEvent, useEffect, useState } from 'react'
-import { useFilteredImages, useSetViewerImage, useViewerImage, useViewerIndex } from './ImagesProvider'
+import { useFilteredImages, useMoveImages, useSetViewerImage, useViewerImage, useViewerIndex } from './ImagesProvider'
 
 const KeyListener = () => {
   const [viewerIndex, setViewerIndex] = useViewerIndex()
   const setViewerImage = useSetViewerImage()
   const filteredImages = useFilteredImages()
+  const image = useViewerImage()
+  const moveImages = useMoveImages()
   useEffect(() => {
     const handleKeyUp = (e: KeyboardEvent<Element>) => {
       if(e.key == 'ArrowLeft' && viewerIndex > 0) {
@@ -16,6 +18,7 @@ const KeyListener = () => {
         setViewerIndex(viewerIndex + 1)
       }
       if(e.key == 'Escape') setViewerImage(false)
+      if(e.key === 'Delete') moveImages([image], 'trash')
     }
     window.addEventListener('keyup', handleKeyUp)
     return () => {
