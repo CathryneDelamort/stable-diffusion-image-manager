@@ -2,7 +2,7 @@ import Box from '../layout/Box'
 import Stack from '../layout/Stack'
 import type { ImageData } from '../types/ImageData.type'
 import { useSwipeable } from 'react-swipeable'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useFilteredImages, useMoveImages } from './ImagesProvider'
 
 type Props = {
