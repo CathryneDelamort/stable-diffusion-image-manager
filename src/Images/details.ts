@@ -10,6 +10,7 @@ const details = {
   sampler: { title: 'Sampler', prefix: '👀' },
   steps: { title: 'Steps', prefix: '🚶' },
   folder: { title: 'Folder', prefix: '📁' },
+  width: { title: 'Width', prefix: '' }
 }
 
 export default details
