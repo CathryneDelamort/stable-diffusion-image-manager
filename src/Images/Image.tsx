@@ -54,6 +54,14 @@ const Image = ({ index, ...image  }: Props) => {
 
   return <Stack width={displaySize} gap="sm" ref={ref}>
     <Box position="relative">
+      <Box 
+        position="absolute"
+        style={{ background: '#333', bottom: 0, right: 0 }} 
+        paddingX="sm"
+        paddingY="xs"
+      >
+        {index}
+      </Box>
       <Box position="absolute" style={{ top: 0, right: 0 }}>
         <label htmlFor={`checkbox-${file}`} style={{ padding: '1rem', display: 'block' }}>
           <input
