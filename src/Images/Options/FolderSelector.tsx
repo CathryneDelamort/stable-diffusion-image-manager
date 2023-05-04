@@ -19,6 +19,7 @@ const FolderSelector = () => {
     <option value="">📁&nbsp; Root</option>
     <option value="review">📁&nbsp; Review</option>
     <option value="queue">📁&nbsp; Queue</option>
+    <option value="upscaled">📁&nbsp; Upscaled</option>
     <option value="archive">📁&nbsp; Archive</option>
     <option value="trash">🗑 Trash</option>
 
