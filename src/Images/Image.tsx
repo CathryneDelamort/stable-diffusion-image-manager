@@ -87,7 +87,7 @@ const Image = ({ index, ...image  }: Props) => {
     {detailsToShow.length > 0 && 
       <Stack justifyContent="center" gap="xs">
         {detailsToShow.map(key =>
-          <Box title={'Model'} key={key}>
+          <Box title={details[key].title} key={key}>
             {details[key].title}: <Filterable type={key}>{image[key]}</Filterable>
           </Box>
         )}
