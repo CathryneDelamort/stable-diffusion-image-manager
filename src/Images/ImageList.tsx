@@ -18,7 +18,7 @@ const ImageList = () => {
             </FlexBox>
           }
           <FlexBox gap="sm" wrap justifyContent="center" alignItems="flex-start">
-            {filteredImages.map((image: ImageData, i: number) =>
+            {filteredImages.slice(0, 1000).map((image: ImageData, i: number) =>
               <Image {...image} key={JSON.stringify(image)} index={i} />
             )}
           </FlexBox>
