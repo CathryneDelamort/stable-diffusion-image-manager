@@ -1,5 +1,6 @@
 export type ImageData = {
   cfg: number
+  checkpoint: string
   created: number
   denoise: number
   faceRestoration: string

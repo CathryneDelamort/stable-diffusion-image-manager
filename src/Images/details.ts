@@ -1,9 +1,11 @@
 const details = {
+  checkpoint: { title: 'Checkpoint', prefix: '📦' },
   model: { title: 'Model hash', prefix: '📦' },
   prompt: { title: 'Prompt', prefix: '💬' },
   negativePrompt: { title: 'Negative prompt', prefix: '🤫' },
   seed: { title: 'Seed', prefix: '🌱' },
   cfg: { title: 'CFG value', prefix: 'CFG' },
+  file: { title: 'Filename', prefix: '📄' },
   denoise: { title: 'Denoise strength', prefix: '🔇' },
   faceRestoration: { title: 'Face restoration', prefix: '🥸' },
   hiresUpscaler: { title: 'Hires upscaler', prefix: '🔎' },

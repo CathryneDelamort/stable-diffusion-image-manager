@@ -52,6 +52,7 @@ const readFolder = (folder: string) => {
           const [width, height] = (size?.split('x') || ['', '']).map(parseInt)
           const metaData = {
             cfg: parseFloat(getDetail('CFG scale')),
+            checkpoint: getDetail('Model'),
             created: statSync(join(IMAGE_PATH, file)).ctimeMs,
             denoise: parseFloat(getDetail('Denoising strength')),
             faceRestoration: getDetail('Face restoration'),
